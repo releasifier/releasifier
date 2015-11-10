@@ -1,7 +1,7 @@
 #!/bin/bash
 
-database="react_native_updater_db"
-user="react_native_updater"
+database="releasifer_db"
+user="releasifer_agent"
 password="98uhi4q3brjfnsdlzisw2"
 
 # create postgres USER as SUPERUSER
@@ -20,8 +20,8 @@ psql -h127.0.0.1 -U postgres <<< "CREATE DATABASE $database ENCODING 'UTF-8' LC_
 psql -h127.0.0.1 -U postgres <<< "CREATE USER $user WITH PASSWORD '$password';"
 
 # updated schema
-cat data/schema/users.sql | psql -h127.0.0.1 -U $user -d $database
-cat data/schema/apps.sql | psql -h127.0.0.1 -U $user -d $database
-cat data/schema/apps_users_permissions.sql | psql -h127.0.0.1 -U $user -d $database
-cat data/schema/releases.sql | psql -h127.0.0.1 -U $user -d $database
-cat data/schema/bundles.sql | psql -h127.0.0.1 -U $user -d $database
+cat data/schemas/users.sql | psql -h127.0.0.1 -U $user -d $database
+cat data/schemas/apps.sql | psql -h127.0.0.1 -U $user -d $database
+cat data/schemas/apps_users_permissions.sql | psql -h127.0.0.1 -U $user -d $database
+cat data/schemas/releases.sql | psql -h127.0.0.1 -U $user -d $database
+cat data/schemas/bundles.sql | psql -h127.0.0.1 -U $user -d $database
