@@ -1,7 +1,7 @@
 #!/bin/bash
 
-database="releasifer_db"
-user="releasifer_agent"
+database="releasifier_db"
+user="releasifier_agent"
 password="98uhi4q3brjfnsdlzisw2"
 
 # create postgres USER as SUPERUSER
