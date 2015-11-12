@@ -17,3 +17,7 @@ CREATE TABLE users (
 );
 
 ALTER TABLE ONLY users ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+-- # INSERT Root user
+-- # please change this according to your specification
+INSERT INTO users (id, fullname, email, password) VALUES (1, 'Mr. Robot', 'root', 'root')
