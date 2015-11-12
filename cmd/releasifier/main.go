@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"os"
 
+	"github.com/alinz/releasifier"
 	"github.com/alinz/releasifier/config"
 )
 
@@ -19,10 +19,18 @@ func main() {
 	var err error
 	var conf *config.Config
 
+	//load configuration from either confFile or Env's CONFIG variable
 	conf, err = config.New(*confFile, os.Getenv("CONFIG"))
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("%v", conf)
+	//create a new Releasidier app.
+	_, err = releasifier.New(conf)
+	if err != nil {
+		panic(err)
+	}
+
+	//start the Releasifier's App
+	releasifier.App.Start()
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/alinz/releasifier/config"
 	"github.com/jmoiron/sqlx"
 	"upper.io/bond"
 	"upper.io/db/postgresql"
@@ -51,7 +52,17 @@ func NewDB(dbURL string) (*Database, error) {
 	db.Release = ReleaseStore{Store: db.Store(`releases`)}
 	db.Bundle = BundleStore{Store: db.Store(`bundle`)}
 
+	if DB != nil {
+		DB.Close()
+	}
+
 	DB = db
 
 	return db, nil
+}
+
+//NewDBWithConfig calls NewDB with poper URL
+func NewDBWithConfig(dbConf *config.Config) (*Database, error) {
+	dbURL := BuildDbURL(dbConf.DB.Username, dbConf.DB.Password, dbConf.DB.Hosts, dbConf.DB.Database)
+	return NewDB(dbURL)
 }
