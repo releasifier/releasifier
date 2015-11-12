@@ -6,8 +6,8 @@ import (
 	"github.com/alinz/releasifier/config"
 	"github.com/alinz/releasifier/data"
 	"github.com/alinz/releasifier/lib/logme"
+	"github.com/alinz/releasifier/web"
 	"github.com/tylerb/graceful"
-	"github.com/zenazn/goji/web"
 )
 
 //Global App pointer
@@ -30,7 +30,7 @@ func (r *Releasifier) Exit() {
 
 //New makes a new and setup releasifer app's settings
 func New(conf *config.Config) (*Releasifier, error) {
-	logme.Info("Releasifier started at %v", conf.Server.Bind)
+	logme.Info("Releasifier started at " + conf.Server.Bind)
 
 	//make sure that App is replaced properly.
 	if App != nil {

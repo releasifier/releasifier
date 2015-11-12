@@ -2,8 +2,8 @@ clean:
 	@rm -rf ./bin
 
 dist-tools:
-	go get github.com/pilu/fresh
-	go get github.com/robfig/glock
+	go get -u github.com/pkieltyka/fresh
+	go get -v github.com/robfig/glock
 
 deps:
 	@glock sync github.com/alinz/releasifier
@@ -15,7 +15,7 @@ build:
 dev:
 	@(export CONFIG=$$PWD/etc/releasifier.conf && \
 		cd ./cmd/releasifier && \
-		fresh -c ../../etc/fresh-runner.conf)
+		fresh -c ../../etc/fresh-runner.conf -w=../..)
 
 ##
 ## Database mgmt
