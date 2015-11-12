@@ -31,8 +31,12 @@ type Config struct {
 }
 
 //New read a configuration file and returns a Config object
-func New(configFile string) (*Config, error) {
+func New(configFile string, confEnv string) (*Config, error) {
 	config := &Config{}
+
+	if configFile == "" {
+		configFile = confEnv
+	}
 
 	if _, err := toml.DecodeFile(configFile, &config); err != nil {
 		return nil, err

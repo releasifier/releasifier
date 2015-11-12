@@ -1,17 +1,28 @@
 package main
 
 import (
-	"net/http"
+	"flag"
+	"fmt"
+	"os"
 
-	"github.com/pressly/chi"
+	"github.com/alinz/releasifier/config"
+)
+
+var (
+	flags    = flag.NewFlagSet("releasifier", flag.ExitOnError)
+	confFile = flag.String("config", "", "path to config file")
 )
 
 func main() {
-	r := chi.NewRouter()
+	flags.Parse(os.Args[1:])
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("hi"))
-	})
+	var err error
+	var conf *config.Config
 
-	http.ListenAndServe(":7331", r)
+	conf, err = config.New(*confFile, os.Getenv("CONFIG"))
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("%v", conf)
 }
