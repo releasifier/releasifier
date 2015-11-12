@@ -6,6 +6,8 @@ import (
 	"io"
 	"math"
 	"os"
+
+	"github.com/alinz/releasifier/lib/logme"
 )
 
 const filechunk = 8192
@@ -14,7 +16,7 @@ const filechunk = 8192
 func HashFile(filename string) string {
 	file, err := os.Open("utf8.txt")
 	if err != nil {
-		panic(err.Error())
+		logme.Fatal(err.Error())
 	}
 
 	defer file.Close()

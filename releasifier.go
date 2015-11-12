@@ -5,6 +5,7 @@ import (
 
 	"github.com/alinz/releasifier/config"
 	"github.com/alinz/releasifier/data"
+	"github.com/alinz/releasifier/lib/logme"
 	"github.com/tylerb/graceful"
 	"github.com/zenazn/goji/web"
 )
@@ -29,6 +30,8 @@ func (r *Releasifier) Exit() {
 
 //New makes a new and setup releasifer app's settings
 func New(conf *config.Config) (*Releasifier, error) {
+	logme.Info("Releasifier started at %v", conf.Server.Bind)
+
 	//make sure that App is replaced properly.
 	if App != nil {
 		App.Exit()
@@ -39,7 +42,7 @@ func New(conf *config.Config) (*Releasifier, error) {
 	//Start a new DB session
 	_, err := data.NewDBWithConfig(conf)
 	if err != nil {
-		panic(err)
+		logme.Fatal(err)
 	}
 
 	App = app

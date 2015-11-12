@@ -6,6 +6,7 @@ import (
 
 	"github.com/alinz/releasifier"
 	"github.com/alinz/releasifier/config"
+	"github.com/alinz/releasifier/lib/logme"
 )
 
 var (
@@ -22,13 +23,13 @@ func main() {
 	//load configuration from either confFile or Env's CONFIG variable
 	conf, err = config.New(*confFile, os.Getenv("CONFIG"))
 	if err != nil {
-		panic(err)
+		logme.Fatal(err)
 	}
 
 	//create a new Releasidier app.
 	_, err = releasifier.New(conf)
 	if err != nil {
-		panic(err)
+		logme.Fatal(err)
 	}
 
 	//start the Releasifier's App
