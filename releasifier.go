@@ -1,8 +1,12 @@
 package releasifier
 
 import (
+	"time"
+
 	"github.com/alinz/releasifier/config"
 	"github.com/alinz/releasifier/data"
+	"github.com/tylerb/graceful"
+	"github.com/zenazn/goji/web"
 )
 
 //Global App pointer
@@ -15,7 +19,7 @@ type Releasifier struct {
 
 //Start starts Releasifier App, listeing to specified port
 func (r *Releasifier) Start() {
-
+	graceful.Run(r.Config.Server.Bind, 10*time.Second, web.New())
 }
 
 //Exit stops the app
