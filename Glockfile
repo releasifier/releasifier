@@ -3,6 +3,7 @@ github.com/BurntSushi/toml 056c9bc7be7190eaa7715723883caffa5f8fa3e4
 github.com/Sirupsen/logrus 6f383a9b2998dd6f401704269c3e6e192f6175ad
 github.com/stretchr/testify f3960ab1f9664ecc4e27c78af27cc9063d745a43
 github.com/jmoiron/sqlx ad7f2641d00865a3d5b860ccdade6f8e63dbdae6
+github.com/lann/squirrel e13dbacee404686afd0acf2d44b8d34869605e03
 upper.io/bond 6699f26b5094ef57d31d2e61654f6b533c53b1a3
 upper.io/cache 5db9266c408a0268c9c2ceaa79ab4dcc8e135489
 upper.io/db 7584838539e356b872798dce22e96acd78031cff
