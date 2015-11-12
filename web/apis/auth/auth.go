@@ -8,10 +8,7 @@ import (
 )
 
 func login(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	// t := ctx.Value("json_body")
-	// body, ok := t.(*loginRequest)
-	//
-	//
+
 }
 
 func logout(ctx context.Context, w http.ResponseWriter, r *http.Request) {
