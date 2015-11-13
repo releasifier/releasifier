@@ -6,7 +6,7 @@ import (
 
 	"github.com/alinz/releasifier"
 	"github.com/alinz/releasifier/config"
-	"github.com/alinz/releasifier/lib/logme"
+	"github.com/alinz/releasifier/logme"
 )
 
 var (
@@ -27,11 +27,15 @@ func main() {
 	}
 
 	//create a new Releasidier app.
-	_, err = releasifier.New(conf)
+	app, err := releasifier.New(conf)
 	if err != nil {
 		logme.Fatal(err)
 	}
 
-	//start the Releasifier's App
-	releasifier.App.Start()
+	//start the Releasifier's App.
+	//this will block until app stops, either by panic or exit signal
+	app.Start()
+
+	logme.Info("App is shutting down.")
+	app.Exit()
 }

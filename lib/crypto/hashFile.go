@@ -7,7 +7,7 @@ import (
 	"math"
 	"os"
 
-	"github.com/alinz/releasifier/lib/logme"
+	"github.com/alinz/releasifier/logme"
 )
 
 const filechunk = 8192

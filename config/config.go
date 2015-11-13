@@ -2,6 +2,9 @@ package config
 
 import "github.com/BurntSushi/toml"
 
+//global Config variable
+var Conf *Config
+
 //Config this is a config structure
 type Config struct {
 	//[server]
@@ -20,6 +23,15 @@ type Config struct {
 	AES struct {
 		SecureKey string `toml:"secure_key"`
 	} `toml:"aes"`
+
+	//[jwt]
+	JWT struct {
+		SecretKey string `toml:"jwt_key"`
+		MaxAge    int    `toml:"max_age"`
+		Path      string `toml:"path"`
+		Domain    string `toml:"domain"`
+		Secure    bool   `toml:"secure"`
+	} `toml:"jwt"`
 
 	//[db]
 	DB struct {
@@ -41,6 +53,8 @@ func New(configFile string, confEnv string) (*Config, error) {
 	if _, err := toml.DecodeFile(configFile, &config); err != nil {
 		return nil, err
 	}
+
+	Conf = config
 
 	return config, nil
 }

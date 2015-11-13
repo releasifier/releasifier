@@ -10,8 +10,6 @@ func Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Post("/login", m.BodyParser(loginRequestBuilder, 512), login)
-	r.Post("/permissions", setPermissions)
-	r.Get("/permissions", getPermissions)
 	r.Get("/logout", logout)
 
 	return r
