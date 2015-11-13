@@ -20,11 +20,19 @@ func login(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	security.SetJwtCookie("hello", w)
+	claims := map[string]interface{}{"user_id": fmt.Sprintf("%v", user.ID)}
+	_, tokenStr, err := security.TokenAuth.Encode(claims)
+	if err != nil {
+		security.RemoveJwtCookie(w)
+		utils.Respond(w, 401, fmt.Errorf("Authorization failed."))
+		return
+	}
 
+	security.SetJwtCookie(tokenStr, w)
 	utils.Respond(w, 200, user)
 }
 
 func logout(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	utils.Respond(w, 200, "bye")
+	security.RemoveJwtCookie(w)
+	utils.Respond(w, 200, "")
 }
