@@ -12,6 +12,7 @@ func Routes() chi.Router {
 
 	r.Get("/", getAllApps)
 	r.Post("/", createApp)
+	r.Put("/:appID", updateApp)
 	r.Delete("/:appID", removeApp)
 
 	return r

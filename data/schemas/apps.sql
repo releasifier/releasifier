@@ -11,6 +11,8 @@ CREATE SEQUENCE app_id_seq
 CREATE TABLE apps (
     id bigint DEFAULT nextval('app_id_seq'::regclass) NOT NULL,
     name varchar(256) NOT NULL,
+    public_key text NOT NULL,
+    private_key text NOT NULL,
     created_at timestamp DEFAULT now() NOT NULL
 );
 

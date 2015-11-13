@@ -6,13 +6,13 @@ import (
 
 	"github.com/alinz/releasifier/data"
 	"github.com/alinz/releasifier/lib/utils"
-	m "github.com/alinz/releasifier/web/middlewares"
+	"github.com/alinz/releasifier/web/constants"
 	"github.com/alinz/releasifier/web/security"
 	"golang.org/x/net/context"
 )
 
 func login(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	loginReq := ctx.Value(m.BodyParserCtxKey).(*loginRequest)
+	loginReq := ctx.Value(constants.CtxKeyParsedBody).(*loginRequest)
 	user, err := data.DB.User.FindByEmailPassword(loginReq.Email, loginReq.Password)
 
 	if err != nil {
