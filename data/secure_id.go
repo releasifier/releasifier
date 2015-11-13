@@ -12,12 +12,6 @@ var _secureIDKey []byte
 //SecureID is an int64 type which does encrypt and decrypt the value
 type SecureID int64
 
-// TODO: look at reeler code for the DB Marshal/Unmarshal methods
-// put it on the SecureID ...
-// however, the error where int64 is not assignable to SecureID
-// happens in Bond when it attempts to set the primary key..
-// -- there is another ID Setter/Getter though.. look that up.
-
 //MarshalJSON for type SecureID for encrypting id value
 func (id SecureID) MarshalJSON() ([]byte, error) {
 	value, err := crypto.EncryptSecureInt64AsBase64(int64(id), _secureIDKey)
@@ -41,6 +35,21 @@ func (id *SecureID) UnmarshalJSON(data []byte) error {
 	}
 
 	*id = SecureID(v)
+	return nil
+}
+
+//MarshalDB converts SecureID to int64 so it can be store properly to db
+func (id SecureID) MarshalDB() (interface{}, error) {
+	return int64(id), nil
+}
+
+//UnmarshalDB converts int64 to SecureID
+func (id *SecureID) UnmarshalDB(v interface{}) error {
+	val, ok := v.(int64)
+	if !ok {
+		return fmt.Errorf("id is not int64")
+	}
+	*id = SecureID(val)
 	return nil
 }
 

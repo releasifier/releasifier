@@ -16,6 +16,7 @@ type Database struct {
 
 	Sqlx *sqlx.DB
 
+	User    UserStore
 	App     AppStore
 	Release ReleaseStore
 	Bundle  BundleStore
@@ -48,6 +49,7 @@ func NewDB(dbURL string) (*Database, error) {
 
 	db.Sqlx = db.Session.Driver().(*sqlx.DB)
 
+	db.User = UserStore{Store: db.Store(`users`)}
 	db.App = AppStore{Store: db.Store(`apps`)}
 	db.Release = ReleaseStore{Store: db.Store(`releases`)}
 	db.Bundle = BundleStore{Store: db.Store(`bundle`)}

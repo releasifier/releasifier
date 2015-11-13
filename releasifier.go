@@ -39,6 +39,9 @@ func New(conf *config.Config) (*Releasifier, error) {
 
 	app := &Releasifier{Config: conf}
 
+	//set SecureIDKey from config
+	data.SetSecureIDKey(conf.AES.SecureKey)
+
 	//Start a new DB session
 	_, err := data.NewDBWithConfig(conf)
 	if err != nil {

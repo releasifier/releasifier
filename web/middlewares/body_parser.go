@@ -8,6 +8,9 @@ import (
 	"golang.org/x/net/context"
 )
 
+//BodyParserCtxKey contains the name of field in ctx
+const BodyParserCtxKey = "json_body"
+
 //BodyParser loads builder with maxSize and tries to load the message.
 //if for some reason it can't parse the message, it will return an error.
 //if successful, it will put the processed data into context with key 'json_body'
@@ -21,7 +24,7 @@ func BodyParser(builder func() interface{}, maxSize int64) func(chi.Handler) chi
 				return
 			}
 
-			ctx = context.WithValue(ctx, "json_body", to)
+			ctx = context.WithValue(ctx, BodyParserCtxKey, to)
 
 			next.ServeHTTPC(ctx, w, r)
 		})
