@@ -13,7 +13,7 @@ func New() http.Handler {
 	r := chi.NewRouter()
 
 	r.Mount("/auth", auth.Routes())
-	r.Mount("/app", app.Routes())
+	r.Mount("/apps", app.Routes())
 
 	return r
 }

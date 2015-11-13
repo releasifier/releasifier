@@ -5,12 +5,14 @@ import (
 	"github.com/pressly/chi"
 )
 
-//Routes returns chi's Router for Auth APIs
+//Routes returns chi's Router for App APIs
 func Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Use(security.TokenAuth.Handle("state"))
 
-	r.Get("/test", test)
+	r.Get("/", getAllApps)
+	r.Post("/", createApp)
+	r.Delete("/:appID", removeApp)
 
 	return r
 }
