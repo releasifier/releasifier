@@ -1,6 +1,7 @@
-package app
+package apps
 
 import (
+	m "github.com/alinz/releasifier/web/middlewares"
 	"github.com/alinz/releasifier/web/security"
 	"github.com/pressly/chi"
 )
@@ -11,7 +12,7 @@ func Routes() chi.Router {
 	r.Use(security.TokenAuth.Handle("state"))
 
 	r.Get("/", getAllApps)
-	r.Post("/", createApp)
+	r.Post("/", m.BodyParser(createAppRequestBuilder, 100), createApp)
 	r.Put("/:appID", updateApp)
 	r.Delete("/:appID", removeApp)
 
