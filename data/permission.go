@@ -9,21 +9,22 @@ import (
 type Permission int
 
 const (
-	//FULL represents source code in JS
-	FULL Permission = iota
-	//READONLY represents picture and image types
-	READONLY
+	OWNER Permission = iota
+	//WRITE represents source code in JS
+	WRITE
+	//READ represents picture and image types
+	READ
 )
 
 var (
 	permissionNameToValue = map[string]Permission{
-		"FULL":     FULL,
-		"READONLY": READONLY,
+		"WRITE": WRITE,
+		"READ":  READ,
 	}
 
 	permissionValueToName = map[Permission]string{
-		FULL:     "FULL",
-		READONLY: "READONLY",
+		WRITE: "WRITE",
+		READ:  "READ",
 	}
 )
 
