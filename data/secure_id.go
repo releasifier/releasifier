@@ -38,21 +38,6 @@ func (id *SecureID) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-//MarshalDB converts SecureID to int64 so it can be store properly to db
-func (id SecureID) MarshalDB() (interface{}, error) {
-	return int64(id), nil
-}
-
-//UnmarshalDB converts int64 to SecureID
-func (id *SecureID) UnmarshalDB(v interface{}) error {
-	val, ok := v.(int64)
-	if !ok {
-		return fmt.Errorf("id is not int64")
-	}
-	*id = SecureID(val)
-	return nil
-}
-
 //SetSecureIDKey we need to set this value inside our main.
 func SetSecureIDKey(secureKey string) {
 	_secureIDKey = []byte(secureKey)

@@ -20,7 +20,7 @@ func getAllApps(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 func createApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	createAppReq := ctx.Value(constants.CtxKeyParsedBody).(*createAppRequest)
 
-	app, err := data.DB.App.CreateApp(createAppReq.Name, 1)
+	app, err := data.DB.App.CreateNewApp(createAppReq.Name)
 
 	if err == nil {
 		utils.Respond(w, 200, app)
