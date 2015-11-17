@@ -1,6 +1,6 @@
 package data
 
 type AppsUsersPermissions struct {
-	AppID  SecureID `db:"id,omitempty" json:"id"`
-	UserID SecureID `db:"id,omitempty" json:"id"`
+	AppID  int64 `db:"id,omitempty" json:"id"`
+	UserID int64 `db:"id,omitempty" json:"id"`
 }

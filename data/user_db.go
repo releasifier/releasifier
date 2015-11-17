@@ -30,29 +30,35 @@ var _ interface {
 	bond.HasAfterDelete
 } = &User{}
 
+//BeforeCreate convert Secure ID to regualr id
 func (u *User) BeforeCreate(sess bond.Session) error {
 	u.ID = int64(u.SecureID)
 	return nil
 }
 
+//AfterCreate convert regualr id to Secure ID
 func (u *User) AfterCreate(sess bond.Session) {
 	u.SecureID = SecureID(u.ID)
 }
 
+//BeforeUpdate convert Secure ID to regualr id
 func (u *User) BeforeUpdate(sess bond.Session) error {
 	u.ID = int64(u.SecureID)
 	return nil
 }
 
+//AfterUpdate convert regualr id to Secure ID
 func (u *User) AfterUpdate(sess bond.Session) {
 	u.SecureID = SecureID(u.ID)
 }
 
+//BeforeDelete convert Secure ID to regualr id
 func (u *User) BeforeDelete(sess bond.Session) error {
 	u.ID = int64(u.SecureID)
 	return nil
 }
 
+//AfterDelete convert regualr id to Secure ID
 func (u *User) AfterDelete(sess bond.Session) {
 	u.SecureID = SecureID(u.ID)
 }
