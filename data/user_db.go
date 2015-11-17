@@ -13,7 +13,7 @@ type User struct {
 	Fullname string    `db:"fullname" json:"fullname"`
 	Email    string    `db:"email" json:"email"`
 	Password string    `db:"password" json:"password"`
-	CreateAt time.Time `db:"created_at" json:"created_at"`
+	CreateAt time.Time `db:"created_at" json:"created_at" bondb:",utc"`
 }
 
 //CollectionName returns collection name in database

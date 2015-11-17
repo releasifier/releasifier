@@ -12,7 +12,7 @@ type Release struct {
 	SecureID SecureID  `json:"id"`
 	Note     string    `db:"note" json:"note"`
 	Version  Version   `db:"version" json:"version"`
-	CreateAt time.Time `db:"created_at" json:"created_at"`
+	CreateAt time.Time `db:"created_at" json:"created_at" bondb:",utc"`
 }
 
 //CollectionName returns collection name in database

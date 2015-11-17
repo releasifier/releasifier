@@ -9,6 +9,7 @@ import (
 type Permission int
 
 const (
+	//OWNER who ever creates the app first
 	OWNER Permission = iota
 	//WRITE represents source code in JS
 	WRITE
@@ -18,11 +19,13 @@ const (
 
 var (
 	permissionNameToValue = map[string]Permission{
+		"OWNER": OWNER,
 		"WRITE": WRITE,
 		"READ":  READ,
 	}
 
 	permissionValueToName = map[Permission]string{
+		OWNER: "OWNER",
 		WRITE: "WRITE",
 		READ:  "READ",
 	}
@@ -37,6 +40,7 @@ func (p Permission) MarshalJSON() ([]byte, error) {
 	if !ok {
 		return nil, fmt.Errorf("invalid Permission: %d", p)
 	}
+
 	return json.Marshal(s)
 }
 

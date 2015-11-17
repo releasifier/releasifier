@@ -2,25 +2,34 @@ package apps
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/alinz/releasifier/data"
 	"github.com/alinz/releasifier/lib/utils"
 	"github.com/alinz/releasifier/web/constants"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/pressly/chi"
 	"golang.org/x/net/context"
 )
 
 func getAllApps(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	//token := ctx.Value(constants.CtxKeyJwtToken).(*jwt.Token)
-	//userID := token.Claims["user_id"].(string)
+	token := ctx.Value(constants.CtxKeyJwtToken).(*jwt.Token)
+	userIDStr := token.Claims["user_id"].(string)
+	userID, _ := strconv.ParseInt(userIDStr, 10, 64)
 
-	utils.Respond(w, 200, "all apps")
+	apps, err := data.DB.App.FindAllByUserID(userID)
+
+	if err != nil {
+		utils.Respond(w, 400, err)
+	} else {
+		utils.Respond(w, 200, apps)
+	}
 }
 
 func createApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	createAppReq := ctx.Value(constants.CtxKeyParsedBody).(*createAppRequest)
 
-	app, err := data.DB.App.CreateNewApp(createAppReq.Name)
+	app, err := data.DB.App.CreateNewApp(1, createAppReq.Name, "", "")
 
 	if err == nil {
 		utils.Respond(w, 200, app)

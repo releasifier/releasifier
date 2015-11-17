@@ -14,7 +14,7 @@ type Bundle struct {
 	Hash      string    `db:"hash" json:"hash"`
 	Name      string    `db:"name" json:"name"`
 	Type      Type      `db:"type" json:"type"`
-	CreatedAt time.Time `db:"cretad_at" json:"created_at"`
+	CreatedAt time.Time `db:"cretad_at" json:"created_at" bondb:",utc"`
 }
 
 //CollectionName returns collection name in database
