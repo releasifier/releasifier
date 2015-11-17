@@ -18,7 +18,9 @@ func (id SecureID) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return json.Marshal(value)
+
+	//remove '=' from last value. it makes the id look better :D
+	return json.Marshal(value[:len(value)-1])
 }
 
 //UnmarshalJSON for type SecureID for decrypting the id
@@ -28,7 +30,8 @@ func (id *SecureID) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("ID should be a string, got %s", data)
 	}
 
-	v, err := crypto.DecryptSecureInt64FromBase64(s, _secureIDKey)
+	//before we decrypt the id, we need to append '=' to the end of s.
+	v, err := crypto.DecryptSecureInt64FromBase64(s+"=", _secureIDKey)
 
 	if err != nil {
 		return err

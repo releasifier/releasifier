@@ -8,12 +8,12 @@ import (
 
 //User struct for storing the basic information about each user
 type User struct {
-	ID       int64     `db:"id,omitempty,pk" json:"-"`
-	SecureID SecureID  `json:"id"`
-	Fullname string    `db:"fullname" json:"fullname"`
-	Email    string    `db:"email" json:"email"`
-	Password string    `db:"password" json:"password"`
-	CreateAt time.Time `db:"created_at" json:"created_at" bondb:",utc"`
+	ID       int64      `db:"id,omitempty,pk" json:"-"`
+	SecureID SecureID   `json:"id"`
+	Fullname string     `db:"fullname" json:"fullname"`
+	Email    string     `db:"email" json:"email"`
+	Password string     `db:"password" json:"password"`
+	CreateAt *time.Time `db:"created_at" json:"created_at" bondb:",utc"`
 }
 
 //CollectionName returns collection name in database
