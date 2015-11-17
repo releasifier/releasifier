@@ -6,9 +6,10 @@ import (
 	"upper.io/bond"
 )
 
+//AppWithPermission is subset of App which includes Permission
 type AppWithPermission struct {
-	App        `bond:",inline"`
-	Permission Permission `db:"permission" json:"permission"`
+	App                  `bond:",inline"`
+	AppsUsersPermissions `bond:",inline"`
 }
 
 //App struct for storing the basic information about each app
@@ -17,7 +18,7 @@ type App struct {
 	SecureID   SecureID   `json:"id"`
 	Name       string     `db:"name" json:"name"`
 	PublicKey  string     `db:"public_key" json:"public_key"`
-	PrivateKey string     `db:"private_key" json:"-"`
+	PrivateKey string     `db:"private_key" json:"private_key,omitempty"`
 	CreateAt   *time.Time `db:"created_at" json:"created_at" bondb:",utc"`
 }
 
@@ -41,9 +42,11 @@ func (a *App) BeforeCreate(sess bond.Session) error {
 	return nil
 }
 
-//AfterCreate convert regualr id to Secure ID
+//AfterCreate convert regualr id to Secure ID and
+//remove private key once it's being created
 func (a *App) AfterCreate(sess bond.Session) {
 	a.SecureID = SecureID(a.ID)
+	a.PrivateKey = ""
 }
 
 //BeforeUpdate convert Secure ID to regualr id
@@ -53,8 +56,10 @@ func (a *App) BeforeUpdate(sess bond.Session) error {
 }
 
 //AfterUpdate convert regualr id to Secure ID
+//remove private key once it's being updated
 func (a *App) AfterUpdate(sess bond.Session) {
 	a.SecureID = SecureID(a.ID)
+	a.PrivateKey = ""
 }
 
 //BeforeDelete convert Secure ID to regualr id
