@@ -10,25 +10,25 @@ import (
 type Permission int
 
 const (
-	//OWNER who ever creates the app first
+	//OWNER can delete the project and make other people OWNER
 	OWNER Permission = iota
-	//WRITE represents source code in JS
-	WRITE
-	//READ represents picture and image types
-	READ
+	//ADMIN can invite other users and publish a build
+	ADMIN
+	//MEMBER can publish a build only
+	MEMBER
 )
 
 var (
 	permissionNameToValue = map[string]Permission{
-		"OWNER": OWNER,
-		"WRITE": WRITE,
-		"READ":  READ,
+		"OWNER":  OWNER,
+		"ADMIN":  ADMIN,
+		"MEMBER": MEMBER,
 	}
 
 	permissionValueToName = map[Permission]string{
-		OWNER: "OWNER",
-		WRITE: "WRITE",
-		READ:  "READ",
+		OWNER:  "OWNER",
+		ADMIN:  "ADMIN",
+		MEMBER: "MEMBER",
 	}
 )
 
