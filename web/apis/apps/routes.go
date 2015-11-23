@@ -12,6 +12,7 @@ func Routes() chi.Router {
 	r.Use(security.TokenAuth.Handle("state"))
 
 	r.Get("/", getAllApps)
+	r.Get("/:appID", getApp)
 	r.Post("/", m.BodyParser(createAppRequestBuilder, 100), createApp)
 	r.Put("/:appID", updateApp)
 	r.Delete("/:appID", removeApp)

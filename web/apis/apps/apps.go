@@ -26,6 +26,11 @@ func getAllApps(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func getApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	appID := chi.URLParams(ctx)["appID"]
+	utils.Respond(w, 200, "get app with id of "+appID)
+}
+
 func createApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	createAppReq := ctx.Value(constants.CtxKeyParsedBody).(*createAppRequest)
 
