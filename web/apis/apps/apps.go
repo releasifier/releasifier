@@ -1,23 +1,23 @@
 package apps
 
 import (
+	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/alinz/releasifier/data"
 	"github.com/alinz/releasifier/lib/utils"
 	"github.com/alinz/releasifier/web/constants"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/alinz/releasifier/web/util"
 	"github.com/pressly/chi"
 	"golang.org/x/net/context"
 )
 
 func getAllApps(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	token := ctx.Value(constants.CtxKeyJwtToken).(*jwt.Token)
-	userIDStr := token.Claims["user_id"].(string)
-	userID, _ := strconv.ParseInt(userIDStr, 10, 64)
+	userID, _ := util.GetUserIDFromContext(ctx)
 
 	apps, err := data.DB.App.FindAllByUserID(userID)
+
+	fmt.Printf("%v\n", apps[0])
 
 	if err != nil {
 		utils.Respond(w, 400, err)
@@ -27,8 +27,10 @@ func getAllApps(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func getApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	appID := chi.URLParams(ctx)["appID"]
-	utils.Respond(w, 200, "get app with id of "+appID)
+	userID, _ := util.GetUserIDFromContext(ctx)
+	appID, _ := util.GetParamValueAsID(ctx, "appID")
+
+	utils.Respond(w, 200, fmt.Sprintf("get app with id of %d for user %d", appID, userID))
 }
 
 func createApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {

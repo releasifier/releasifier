@@ -30,15 +30,29 @@ func (id *SecureID) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("ID should be a string, got %s", data)
 	}
 
-	//before we decrypt the id, we need to append '=' to the end of s.
-	v, err := crypto.DecryptSecureInt64FromBase64(s+"=", _secureIDKey)
-
+	decreptedValue, err := DecryptSecureID(s)
 	if err != nil {
 		return err
 	}
 
-	*id = SecureID(v)
+	*id = decreptedValue
 	return nil
+}
+
+func (id SecureID) String() string {
+	return fmt.Sprintf("%d", int64(id))
+}
+
+//DecryptSecureID a helper function to decrypt secure id based on configured secret key
+func DecryptSecureID(value string) (SecureID, error) {
+	//before we decrypt the id, we need to append '=' to the end of s.
+	v, err := crypto.DecryptSecureInt64FromBase64(value+"=", _secureIDKey)
+
+	if err != nil {
+		return SecureID(-1), err
+	}
+
+	return SecureID(v), nil
 }
 
 //SetSecureIDKey we need to set this value inside our main.
