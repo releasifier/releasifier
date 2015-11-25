@@ -6,7 +6,7 @@ dist-tools:
 	go get -v github.com/robfig/glock
 
 deps:
-	@glock sync github.com/alinz/releasifier
+	@glock -v sync github.com/alinz/releasifier
 
 build:
 	@mkdir -p ./bin

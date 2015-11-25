@@ -4,8 +4,8 @@ import "time"
 
 //AppWithPermission is subset of App which includes Permission
 type AppWithPermission struct {
-	App                  `bond:",inline"`
-	AppsUsersPermissions `bond:",inline"`
+	App        `bond:",inline"`
+	Permission Permission `db:"permission" json:"permission"`
 }
 
 //App struct for storing the basic information about each app

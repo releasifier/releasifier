@@ -16,6 +16,7 @@ type AppStore struct {
 	bond.Store
 }
 
+//CreateNewApp once the app is created, whoever create the app is title as owner
 func (s AppStore) CreateNewApp(userID int64, appName, publicKey, privateKey string) (*App, error) {
 	tx, err := DB.NewTransaction()
 	if err != nil {
@@ -37,29 +38,25 @@ func (s AppStore) CreateNewApp(userID int64, appName, publicKey, privateKey stri
 
 	tx.Save(app)
 
-	//app.ID = SecureID(id.(int64))
-	//tx.Save(app)
+	appUserPermission := &AppsUsersPermissions{
+		ID:         0,
+		UserID:     userID,
+		AppID:      app.ID,
+		Permission: OWNER,
+	}
 
-	// appUserPermission := &AppsUsersPermissions{
-	// 	ID:         0,
-	// 	UserID:     userID,
-	// 	AppID:      int64(app.ID),
-	// 	Permission: OWNER,
-	// }
-	//
-	// if err := tx.Save(appUserPermission); err != nil {
-	// 	return nil, err
-	// }
+	if err := tx.Save(appUserPermission); err != nil {
+		return nil, err
+	}
 
 	if err = tx.Commit(); err != nil {
 		return nil, fmt.Errorf("Failed to create new app: %q", err)
 	}
 
-	//app.SecureID = SecureID(app.ID)
-
 	return app, nil
 }
 
+//FindAllApps returns all the apps that user has access
 func (s AppStore) FindAllApps(userID int64) ([]*AppWithPermission, error) {
 	var apps []*AppWithPermission
 
@@ -88,13 +85,14 @@ func (s AppStore) FindAllApps(userID int64) ([]*AppWithPermission, error) {
 		return nil, err
 	}
 
-	if apps != nil || len(apps) == 0 {
+	if apps == nil || len(apps) == 0 {
 		return make([]*AppWithPermission, 0), nil
 	}
 
 	return apps, nil
 }
 
+//FindApp returns a single app that user has access
 func (s AppStore) FindApp(appID, userID int64) (*AppWithPermission, error) {
 	var apps []*AppWithPermission
 
