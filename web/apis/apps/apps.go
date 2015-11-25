@@ -52,7 +52,7 @@ func updateApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	appID, _ := util.GetParamValueAsID(ctx, "appID")
 	updateAppReq := ctx.Value(constants.CtxKeyParsedBody).(*updateAppRequest)
 
-	err := data.DB.App.UpdateApp(appID, updateAppReq.Name, updateAppReq.PublicKey, updateAppReq.PrivateKey, userID)
+	err := data.DB.App.UpdateApp(appID, updateAppReq.Name, updateAppReq.PublicKey, updateAppReq.PrivateKey, updateAppReq.Private, userID)
 
 	if err == nil {
 		utils.Respond(w, 200, nil)

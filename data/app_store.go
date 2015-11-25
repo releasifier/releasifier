@@ -32,6 +32,7 @@ func (s AppStore) CreateNewApp(userID int64, appName, publicKey, privateKey stri
 		Name:       appName,
 		PublicKey:  publicKey,
 		PrivateKey: privateKey,
+		Private:    true, //by default, all project are private
 	}
 
 	tx.Save(app)
@@ -58,7 +59,7 @@ func (s AppStore) CreateNewApp(userID int64, appName, publicKey, privateKey stri
 func (s AppStore) FindAllApps(userID int64) ([]*AppWithPermission, error) {
 	b := s.Session().Builder()
 	q := b.
-		Select("apps.id", "apps.name", "apps.public_key", "apps.private_key", "apps.created_at", "apps_users_permissions.permission as permission").
+		Select("apps.id", "apps.name", "apps.public_key", "apps.private_key", "apps.created_at", "apps.private", "apps_users_permissions.permission as permission").
 		From("apps").
 		Join("apps_users_permissions").
 		On("apps.id=apps_users_permissions.app_id").
@@ -81,7 +82,7 @@ func (s AppStore) FindApp(appID, userID int64) (*AppWithPermission, error) {
 
 	b := s.Session().Builder()
 	q := b.
-		Select("apps.id", "apps.name", "apps.public_key", "apps.private_key", "apps.created_at", "apps_users_permissions.permission as permission").
+		Select("apps.id", "apps.name", "apps.public_key", "apps.private_key", "apps.created_at", "apps.private", "apps_users_permissions.permission as permission").
 		From("apps").
 		Join("apps_users_permissions").
 		On("apps.id=apps_users_permissions.app_id").
@@ -101,12 +102,12 @@ func (s AppStore) FindApp(appID, userID int64) (*AppWithPermission, error) {
 }
 
 //UpdateApp updates name, public and private key for user who their acess is wither admin or owner
-func (s AppStore) UpdateApp(appID int64, appName, publicKey, privateKey string, userID int64) error {
+func (s AppStore) UpdateApp(appID int64, appName, publicKey, privateKey string, private bool, userID int64) error {
 	var app *App
 
 	b := s.Session().Builder()
 	q := b.
-		Select("apps.id as id", "apps.name as name", "apps.public_key as public_key", "apps.private_key as private_key", "apps.created_at as created_at").
+		Select("apps.id as id", "apps.name as name", "apps.public_key as public_key", "apps.private_key as private_key", "apps.created_at as created_at", "apps.private").
 		From("apps").
 		Join("apps_users_permissions").
 		On("apps.id=apps_users_permissions.app_id").
@@ -125,6 +126,7 @@ func (s AppStore) UpdateApp(appID int64, appName, publicKey, privateKey string, 
 	app.Name = appName
 	app.PrivateKey = privateKey
 	app.PublicKey = publicKey
+	app.Private = private
 
 	s.Save(app)
 
@@ -142,7 +144,7 @@ func (s AppStore) RemoveApp(appID, userID int64) error {
 
 	b := tx.Builder()
 	q := b.
-		Select("apps.id", "apps.name", "apps.public_key", "apps.private_key", "apps.created_at", "apps_users_permissions.permission as permission").
+		Select("apps.id", "apps.name", "apps.public_key", "apps.private_key", "apps.created_at", "apps.private", "apps_users_permissions.permission as permission").
 		From("apps").
 		Join("apps_users_permissions").
 		On("apps.id=apps_users_permissions.app_id").

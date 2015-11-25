@@ -12,9 +12,10 @@ type AppWithPermission struct {
 type App struct {
 	ID         int64      `db:"id,omitempty,pk" json:"id"`
 	Name       string     `db:"name" json:"name"`
-	PublicKey  string     `db:"public_key" json:"public_key"`
-	PrivateKey string     `db:"private_key" json:"private_key,omitempty"`
+	PublicKey  string     `db:"public_key" json:"-"`
+	PrivateKey string     `db:"private_key" json:"-"`
 	CreateAt   *time.Time `db:"created_at" json:"created_at" bondb:",utc"`
+	Private    bool       `db:"private" json:"private"`
 }
 
 //CollectionName returns collection name in database
