@@ -15,9 +15,7 @@ import (
 func getAllApps(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	userID, _ := util.GetUserIDFromContext(ctx)
 
-	apps, err := data.DB.App.FindAllByUserID(userID)
-
-	fmt.Printf("%v\n", apps[0])
+	apps, err := data.DB.App.FindAllApps(userID)
 
 	if err != nil {
 		utils.Respond(w, 400, err)

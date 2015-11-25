@@ -60,7 +60,7 @@ func (s AppStore) CreateNewApp(userID int64, appName, publicKey, privateKey stri
 	return app, nil
 }
 
-func (s AppStore) FindAllByUserID(userID int64) ([]*AppWithPermission, error) {
+func (s AppStore) FindAllApps(userID int64) ([]*AppWithPermission, error) {
 	var apps []*AppWithPermission
 
 	q := squirrel.
@@ -75,8 +75,6 @@ func (s AppStore) FindAllByUserID(userID int64) ([]*AppWithPermission, error) {
 
 	sql, args, err := q.PlaceholderFormat(squirrel.Dollar).ToSql()
 
-	fmt.Println(sql)
-
 	if err != nil {
 		return nil, err
 	}
@@ -88,6 +86,10 @@ func (s AppStore) FindAllByUserID(userID int64) ([]*AppWithPermission, error) {
 
 	if err = sqlutil.FetchRows(rows, &apps); err != nil {
 		return nil, err
+	}
+
+	if apps != nil || len(apps) == 0 {
+		return make([]*AppWithPermission, 0), nil
 	}
 
 	return apps, nil
