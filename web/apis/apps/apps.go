@@ -7,7 +7,6 @@ import (
 	"github.com/alinz/releasifier/lib/utils"
 	"github.com/alinz/releasifier/web/constants"
 	"github.com/alinz/releasifier/web/util"
-	"github.com/pressly/chi"
 	"golang.org/x/net/context"
 )
 
@@ -49,11 +48,27 @@ func createApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 }
 
 func updateApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	appID := chi.URLParams(ctx)["appID"]
-	utils.Respond(w, 200, "update app with id of "+appID)
+	userID, _ := util.GetUserIDFromContext(ctx)
+	appID, _ := util.GetParamValueAsID(ctx, "appID")
+	updateAppReq := ctx.Value(constants.CtxKeyParsedBody).(*updateAppRequest)
+
+	err := data.DB.App.UpdateApp(appID, updateAppReq.Name, updateAppReq.PublicKey, updateAppReq.PrivateKey, userID)
+
+	if err == nil {
+		utils.Respond(w, 200, nil)
+	} else {
+		utils.Respond(w, 400, err)
+	}
 }
 
 func removeApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	appID := chi.URLParams(ctx)["appID"]
-	utils.Respond(w, 200, "delete an app with id of "+appID)
+	userID, _ := util.GetUserIDFromContext(ctx)
+	appID, _ := util.GetParamValueAsID(ctx, "appID")
+
+	err := data.DB.App.RemoveApp(appID, userID)
+	if err == nil {
+		utils.Respond(w, 200, nil)
+	} else {
+		utils.Respond(w, 400, err)
+	}
 }
