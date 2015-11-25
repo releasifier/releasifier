@@ -75,6 +75,8 @@ func (s AppStore) FindAllByUserID(userID int64) ([]*AppWithPermission, error) {
 
 	sql, args, err := q.PlaceholderFormat(squirrel.Dollar).ToSql()
 
+	fmt.Println(sql)
+
 	if err != nil {
 		return nil, err
 	}
@@ -124,9 +126,9 @@ func (s AppStore) FindApp(appID, userID int64) (*AppWithPermission, error) {
 		return nil, err
 	}
 
-	if len(apps) != 1 {
-		return nil, errors.New("app not found")
+	if len(apps) == 1 {
+		return apps[0], nil
 	}
 
-	return apps[0], nil
+	return nil, errors.New("app not found")
 }

@@ -19,11 +19,6 @@ type Config struct {
 		PrivatePath string `toml:"private_key"`
 	} `toml:"rsa"`
 
-	//[aes]
-	AES struct {
-		SecureKey string `toml:"secure_key"`
-	} `toml:"aes"`
-
 	//[jwt]
 	JWT struct {
 		SecretKey string `toml:"jwt_key"`

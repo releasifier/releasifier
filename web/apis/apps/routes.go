@@ -11,13 +11,11 @@ func Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Use(security.TokenAuth.Handle("state"))
 
-	parseSecureIDParams := m.SecureIDParamsParser("appID")
-
 	r.Get("/", getAllApps)
-	r.Get("/:appID", parseSecureIDParams, getApp)
+	r.Get("/:appID", getApp)
 	r.Post("/", m.BodyParser(createAppRequestBuilder, 100), createApp)
-	r.Put("/:appID", parseSecureIDParams, updateApp)
-	r.Delete("/:appID", parseSecureIDParams, removeApp)
+	r.Put("/:appID", updateApp)
+	r.Delete("/:appID", removeApp)
 
 	return r
 }
