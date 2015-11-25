@@ -100,6 +100,7 @@ func (s AppStore) FindApp(appID, userID int64) (*AppWithPermission, error) {
 	return app, nil
 }
 
+//UpdateApp updates name, public and private key for user who their acess is wither admin or owner
 func (s AppStore) UpdateApp(appID int64, appName, publicKey, privateKey string, userID int64) error {
 	var app *App
 
@@ -130,6 +131,7 @@ func (s AppStore) UpdateApp(appID int64, appName, publicKey, privateKey string, 
 	return nil
 }
 
+//RemoveApp removes an app if loggin user has admin or onwer permission
 func (s AppStore) RemoveApp(appID, userID int64) error {
 	tx, err := s.Session().NewTransaction()
 	if err != nil {
