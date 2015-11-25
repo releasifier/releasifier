@@ -1,7 +1,6 @@
 package apps
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/alinz/releasifier/data"
@@ -28,7 +27,13 @@ func getApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	userID, _ := util.GetUserIDFromContext(ctx)
 	appID, _ := util.GetParamValueAsID(ctx, "appID")
 
-	utils.Respond(w, 200, fmt.Sprintf("get app with id of %d for user %d", appID, userID))
+	app, err := data.DB.App.FindApp(appID, userID)
+
+	if err == nil {
+		utils.Respond(w, 200, app)
+	} else {
+		utils.Respond(w, 400, err)
+	}
 }
 
 func createApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
