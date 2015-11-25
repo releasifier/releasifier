@@ -159,11 +159,10 @@ func (s AppStore) RemoveApp(appID, userID int64) error {
 
 	tx.Delete(app)
 
+	err = tx.Commit()
+	if app == nil {
+		return err
+	}
+
 	return nil
 }
-
-//
-//
-//
-//
-//
