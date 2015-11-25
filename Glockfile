@@ -4,9 +4,10 @@ github.com/Sirupsen/logrus 6f383a9b2998dd6f401704269c3e6e192f6175ad
 github.com/stretchr/testify f3960ab1f9664ecc4e27c78af27cc9063d745a43
 github.com/jmoiron/sqlx ad7f2641d00865a3d5b860ccdade6f8e63dbdae6
 github.com/lann/squirrel e13dbacee404686afd0acf2d44b8d34869605e03
-upper.io/db 7584838539e356b872798dce22e96acd78031cff
 upper.io/bond 6699f26b5094ef57d31d2e61654f6b533c53b1a3
 upper.io/cache 5db9266c408a0268c9c2ceaa79ab4dcc8e135489
+upper.io/db 3d65e8413e7740790b8fe7407e53372de74b33bb
+upper.io/builder 8a22a3938430614768ccc4e10dbf62a963b56818
 github.com/tylerb/graceful 48afeb21e2fcbcff0f30bd5ad6b97747b0fae38e
 github.com/dgrijalva/jwt-go acc5a5f31e3493f1992315fd85aa49226372b810
 github.com/goware/jwtauth 2df91be798b57df0bb99cbcd2e1ee01e87e2f92b

@@ -1,11 +1,11 @@
 package data
 
 import (
+	"database/sql"
 	"fmt"
 	"strings"
 
 	"github.com/alinz/releasifier/config"
-	"github.com/jmoiron/sqlx"
 	"upper.io/bond"
 	"upper.io/db/postgresql"
 )
@@ -14,7 +14,7 @@ import (
 type Database struct {
 	bond.Session
 
-	Sqlx *sqlx.DB
+	Sqlx *sql.DB
 
 	User    UserStore
 	App     AppStore
@@ -47,7 +47,7 @@ func NewDB(dbURL string) (*Database, error) {
 		return nil, err
 	}
 
-	db.Sqlx = db.Session.Driver().(*sqlx.DB)
+	db.Sqlx = db.Session.Driver().(*sql.DB)
 
 	db.User = UserStore{Store: db.Store(`users`)}
 	db.App = AppStore{Store: db.Store(`apps`)}
