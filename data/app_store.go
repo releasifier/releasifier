@@ -30,13 +30,15 @@ func (s AppStore) CreateNewApp(userID int64, appName, publicKey, privateKey stri
 	}
 
 	app := &App{
-		ID:         0,
 		Name:       appName,
 		PublicKey:  "",
 		PrivateKey: "",
 	}
 
-	s.Store.Tx(tx).Append(app)
+	tx.Save(app)
+
+	//app.ID = SecureID(id.(int64))
+	//tx.Save(app)
 
 	// appUserPermission := &AppsUsersPermissions{
 	// 	ID:         0,
@@ -44,8 +46,8 @@ func (s AppStore) CreateNewApp(userID int64, appName, publicKey, privateKey stri
 	// 	AppID:      int64(app.ID),
 	// 	Permission: OWNER,
 	// }
-
-	// if err := tx.Append(appUserPermission); err != nil {
+	//
+	// if err := tx.Save(appUserPermission); err != nil {
 	// 	return nil, err
 	// }
 

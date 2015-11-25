@@ -3,6 +3,7 @@ package middlewares
 import (
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/alinz/releasifier/data"
 	"github.com/alinz/releasifier/lib/utils"
@@ -29,4 +30,20 @@ func SecureIDParamsParser(names ...string) func(chi.Handler) chi.Handler {
 			next.ServeHTTPC(ctx, w, r)
 		})
 	}
+}
+
+func SecureIDWriter(builder func() interface{}) {
+
+}
+
+func SecureIDReader(builder func() interface{}) {
+
+}
+
+func init() {
+	a := reflect.TypeOf((*data.App)(nil)).Elem()
+	for i := 0; i < a.NumField(); i++ {
+		fmt.Println(a.Field(i).Tag.Get("securekey"))
+	}
+
 }
