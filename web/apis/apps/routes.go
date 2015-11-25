@@ -13,6 +13,7 @@ func Routes() chi.Router {
 
 	r.Get("/", getAllApps)
 	r.Get("/:appID", getApp)
+	r.Get("/:appID/token", generateAppToken)
 	r.Post("/", m.BodyParser(createAppRequestBuilder, 100), createApp)
 	r.Put("/:appID", m.BodyParser(updateAppRequestBuilder, 2^14+100), updateApp)
 	r.Delete("/:appID", removeApp)

@@ -35,6 +35,10 @@ func getApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func generateAppToken(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+
+}
+
 func createApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	createAppReq := ctx.Value(constants.CtxKeyParsedBody).(*createAppRequest)
 
