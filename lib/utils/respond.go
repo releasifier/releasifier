@@ -9,5 +9,9 @@ func Respond(w http.ResponseWriter, status int, v interface{}) {
 		return
 	}
 
-	WriteJSONTo(w, status, v)
+	if v != nil {
+		WriteJSONTo(w, status, v)
+	} else {
+		w.WriteHeader(status)
+	}
 }
