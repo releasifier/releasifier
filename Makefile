@@ -23,5 +23,11 @@ dev: kill
 reset-db:
 	bash scripts/init_db.sh
 
-kill:
+kill-fresh:
+	ps -ef | grep 'f[r]esh' | awk '{print $$2}' | xargs kill
+
+kill-by-port:
 	lsof -t -i:7331 | xargs kill
+
+kill: kill-fresh kill-by-port
+	
