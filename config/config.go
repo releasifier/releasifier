@@ -35,6 +35,12 @@ type Config struct {
 		Username string   `toml:"username"`
 		Password string   `toml:"password"`
 	} `toml:"db"`
+
+	//[file]
+	File struct {
+		TempFolder   string `toml:"temp_folder"`
+		BundleFolder string `toml:"bundle_folder"`
+	} `toml:"file"`
 }
 
 //New read a configuration file and returns a Config object
