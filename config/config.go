@@ -36,11 +36,12 @@ type Config struct {
 		Password string   `toml:"password"`
 	} `toml:"db"`
 
-	//[file]
-	File struct {
-		TempFolder   string `toml:"temp_folder"`
-		BundleFolder string `toml:"bundle_folder"`
-	} `toml:"file"`
+	//[file_upload]
+	FileUpload struct {
+		MaxSize int64  `toml:"max_size"`
+		Temp    string `toml:"temp"`
+		Bundle  string `toml:"bunle"`
+	} `toml:"file_upload"`
 }
 
 //New read a configuration file and returns a Config object
