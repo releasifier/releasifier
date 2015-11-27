@@ -170,3 +170,35 @@ func (s AppStore) RemoveApp(appID, userID int64) error {
 
 	return nil
 }
+
+func (s AppStore) HasPermission(appID, userID int64, permissions ...Permission) bool {
+	permissionQuery := "("
+	for index, permission := range permissions {
+		if index != 0 {
+			permissionQuery += " OR "
+		}
+		permissionQuery += fmt.Sprintf("apps_users_permissions.permission=%d", permission)
+	}
+	permissionQuery += ")"
+
+	b := s.Session().Builder()
+	q := b.
+		Select("apps.id as id").
+		From("apps").
+		Join("apps_users_permissions").
+		On("apps.id=apps_users_permissions.app_id").
+		Where("user_id=? AND apps.id=? AND "+permissionQuery, userID, appID)
+
+	type TargetID struct {
+		ID int64 `db:"id,omitempty,pk"`
+	}
+
+	var targetID *TargetID
+	err := q.Iterator().One(&targetID)
+
+	if err != nil {
+		return false
+	}
+
+	return targetID.ID == appID
+}

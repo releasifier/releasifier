@@ -6,3 +6,9 @@ import "upper.io/bond"
 type BundleStore struct {
 	bond.Store
 }
+
+func (s BundleStore) FindByHash(hash string) (*Bundle, error) {
+	var bundle *Bundle
+
+	return bundle, nil
+}

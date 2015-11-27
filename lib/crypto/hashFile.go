@@ -6,17 +6,15 @@ import (
 	"io"
 	"math"
 	"os"
-
-	"github.com/alinz/releasifier/logme"
 )
 
 const filechunk = 8192
 
 //HashFile accepting a filename and convert it into secure hash value
-func HashFile(filename string) string {
-	file, err := os.Open("utf8.txt")
+func HashFile(filename string) (string, error) {
+	file, err := os.Open(filename)
 	if err != nil {
-		logme.Fatal(err.Error())
+		return "", err
 	}
 
 	defer file.Close()
@@ -36,5 +34,5 @@ func HashFile(filename string) string {
 		io.WriteString(hash, string(buf))
 	}
 
-	return fmt.Sprintf("%x", hash.Sum(nil))
+	return fmt.Sprintf("%x", hash.Sum(nil)), nil
 }

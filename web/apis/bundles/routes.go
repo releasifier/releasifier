@@ -11,6 +11,7 @@ func Routes() chi.Router {
 	r.Use(security.TokenAuth.Handle("state"))
 
 	r.Post("/upload/app/:appID", uploadBundle)
+	r.Get("/app/:appID/hash/:hash", getBundleByHash)
 
 	return r
 }
