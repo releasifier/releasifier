@@ -13,7 +13,8 @@ func JSONValidation(jsonObj interface{}) error {
 	jsonFieldName := ""
 
 	//if the interface is pointer we need to get access to actual value
-	if tagType.Kind() == reflect.Ptr {
+	interfaceIsPoniter := tagType.Kind() == reflect.Ptr
+	if interfaceIsPoniter {
 		tagType = tagType.Elem()
 	}
 
@@ -42,6 +43,10 @@ func JSONValidation(jsonObj interface{}) error {
 		//needs to be converted into poniter instaed of value.
 		if isRequired {
 			immutable := reflect.ValueOf(jsonObj)
+			//if the interface is pointer we need to get access to actual value
+			if interfaceIsPoniter {
+				immutable = immutable.Elem()
+			}
 			if immutable.FieldByName(field.Name).IsNil() {
 				return fmt.Errorf("field '%s' required", jsonFieldName)
 			}
