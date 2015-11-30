@@ -71,14 +71,12 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 
 **Success**
 
-201
+200
 
 ```
 {
   "id": 1,
-  "fullname": "Mr. Robot",
-  "email": "mr.robot@savetheworld.com",
-  "create_at": "37618361836"
+  "jwt": "token...."
 }
 ```
 
@@ -87,6 +85,12 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 400
 
 409
+
+```
+{
+  "error": "duplicate email"
+}
+```
 
 ### - Login
 
