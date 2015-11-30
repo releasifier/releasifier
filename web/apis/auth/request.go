@@ -15,5 +15,5 @@ type registerRequest struct {
 }
 
 func registerRequestBuilder() interface{} {
-	return &loginRequest{}
+	return &registerRequest{}
 }
