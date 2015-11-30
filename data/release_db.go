@@ -10,6 +10,7 @@ type Release struct {
 	Note     string     `db:"note" json:"note"`
 	Version  Version    `db:"version" json:"version"`
 	CreateAt *time.Time `db:"created_at" json:"created_at" bondb:",utc"`
+	Private  bool       `db:"private" json:"private"`
 }
 
 //CollectionName returns collection name in database
