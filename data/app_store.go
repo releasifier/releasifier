@@ -1,9 +1,9 @@
 package data
 
 import (
-	"errors"
 	"fmt"
 
+	internalErrors "github.com/alinz/releasifier/errors"
 	"upper.io/bond"
 )
 
@@ -13,26 +13,18 @@ type AppStore struct {
 }
 
 //CreateNewApp once the app is created, whoever create the app is title as owner
-func (s AppStore) CreateNewApp(userID int64, appName, publicKey, privateKey string) (*App, error) {
+func (s AppStore) CreateNewApp(userID int64, appName string) (*App, error) {
 	tx, err := DB.NewTransaction()
 	if err != nil {
 		return nil, err
 	}
 	defer tx.Close()
 
-	//we need to pass both public and private keys
-	if (publicKey != "" && privateKey == "") ||
-		(publicKey == "" && privateKey != "") {
-		return nil, errors.New("public and private must be provided together")
-	}
-
-	//TODO (Ali): we need to check whether publicKey and privateKey are matched.
-
 	app := &App{
 		Name:       appName,
-		PublicKey:  publicKey,
-		PrivateKey: privateKey,
-		Private:    true, //by default, all project are private
+		PublicKey:  "",
+		PrivateKey: "",
+		Private:    true, //by default, all projects are private
 	}
 
 	tx.Save(app)
@@ -49,7 +41,7 @@ func (s AppStore) CreateNewApp(userID int64, appName, publicKey, privateKey stri
 	}
 
 	if err = tx.Commit(); err != nil {
-		return nil, fmt.Errorf("Failed to create new app: %q", err)
+		return nil, internalErrors.ErrorDuplicateName
 	}
 
 	return app, nil
@@ -95,14 +87,14 @@ func (s AppStore) FindApp(appID, userID int64) (*AppWithPermission, error) {
 	}
 
 	if app == nil {
-		return nil, errors.New("app not found")
+		return nil, internalErrors.ErrorAppNotFound
 	}
 
 	return app, nil
 }
 
 //UpdateApp updates name, public and private key for user who their acess is wither admin or owner
-func (s AppStore) UpdateApp(appID int64, appName, publicKey, privateKey string, private bool, userID int64) error {
+func (s AppStore) UpdateApp(appID int64, appName, publicKey, privateKey *string, private *bool, userID int64) error {
 	var app *App
 
 	b := s.Session().Builder()
@@ -120,13 +112,24 @@ func (s AppStore) UpdateApp(appID int64, appName, publicKey, privateKey string, 
 	}
 
 	if app == nil {
-		return errors.New("app not found")
+		return internalErrors.ErrorAppNotFound
 	}
 
-	app.Name = appName
-	app.PrivateKey = privateKey
-	app.PublicKey = publicKey
-	app.Private = private
+	if appName != nil {
+		app.Name = *appName
+	}
+
+	if privateKey != nil {
+		app.PrivateKey = *privateKey
+	}
+
+	if publicKey != nil {
+		app.PublicKey = *publicKey
+	}
+
+	if private != nil {
+		app.Private = *private
+	}
 
 	s.Save(app)
 
@@ -158,7 +161,7 @@ func (s AppStore) RemoveApp(appID, userID int64) error {
 	}
 
 	if app == nil {
-		return errors.New("app not found")
+		return internalErrors.ErrorAppNotFound
 	}
 
 	tx.Delete(app)
@@ -171,6 +174,7 @@ func (s AppStore) RemoveApp(appID, userID int64) error {
 	return nil
 }
 
+//HasPermission checks if an appID has one of the provided permissions for userID
 func (s AppStore) HasPermission(appID, userID int64, permissions ...Permission) bool {
 	permissionQuery := "("
 	for index, permission := range permissions {

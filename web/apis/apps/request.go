@@ -1,7 +1,7 @@
 package apps
 
 type createAppRequest struct {
-	Name string `json:"name"`
+	Name *string `json:"name,required"`
 }
 
 func createAppRequestBuilder() interface{} {
@@ -9,10 +9,10 @@ func createAppRequestBuilder() interface{} {
 }
 
 type updateAppRequest struct {
-	Name       string `json:"name"`
-	PublicKey  string `json:"public_key"`
-	PrivateKey string `json:"private_key"`
-	Private    bool   `json:"private"`
+	Name       *string `json:"name"`
+	PublicKey  *string `json:"public_key"`
+	PrivateKey *string `json:"private_key"`
+	Private    *bool   `json:"private"`
 }
 
 func updateAppRequestBuilder() interface{} {

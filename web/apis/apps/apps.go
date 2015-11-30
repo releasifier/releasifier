@@ -42,7 +42,7 @@ func generateAppToken(ctx context.Context, w http.ResponseWriter, r *http.Reques
 func createApp(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	createAppReq := ctx.Value(constants.CtxKeyParsedBody).(*createAppRequest)
 
-	app, err := data.DB.App.CreateNewApp(1, createAppReq.Name, "", "")
+	app, err := data.DB.App.CreateNewApp(1, *createAppReq.Name)
 
 	if err == nil {
 		utils.Respond(w, 200, app)

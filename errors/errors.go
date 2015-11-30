@@ -9,6 +9,7 @@ var (
 	ErrorBodyIssue            = err.New("request body has some issues") //400
 	ErrorFilesTooBig          = err.New("files are too big")            //400
 	ErrorReleaseAlreadyLocked = err.New("release is already locked")    //400
+	ErrorAlreadyAcceessed     = err.New("already accessed to this app") //400
 	ErrorAuthorizationDenied  = err.New("authorization denied")         //401
 	ErrorAuthorizeAccess      = err.New("unauthorized access")          //401
 	ErrorReleaseLocked        = err.New("release is locked")            //403
@@ -27,6 +28,8 @@ func GetErrorStatusCode(err error) int {
 	case ErrorFilesTooBig:
 		return http.StatusBadRequest
 	case ErrorReleaseAlreadyLocked:
+		return http.StatusBadRequest
+	case ErrorAlreadyAcceessed:
 		return http.StatusBadRequest
 	case ErrorAuthorizationDenied:
 		return http.StatusUnauthorized

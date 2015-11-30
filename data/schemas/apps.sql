@@ -18,3 +18,4 @@ CREATE TABLE apps (
 );
 
 ALTER TABLE ONLY apps ADD CONSTRAINT apps_pkey PRIMARY KEY (id);
+ALTER TABLE apps ADD UNIQUE ("name");

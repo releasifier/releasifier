@@ -303,11 +303,18 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 
 `POST : /apps/:appID/token`
 
+```
+{
+  "id": 1,
+  "permission": "admin"
+}
+```
+
 #### Response
 
 **Success**
 
-201
+200
 
 ```
 {
@@ -337,7 +344,13 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 
 #### Request
 
-`GET : /apps/:appID/token/:token`
+`PUT : /apps/:appID/token`
+
+```
+{
+  "token": "1273612uqygejhwdasoc9w7yg4hjwrfs"
+}
+```
 
 #### Response
 
@@ -346,6 +359,13 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 200
 
 **Failure**
+400
+
+```
+{
+  "error": "already accessed to this app"
+}
+```
 
 401
 
