@@ -22,6 +22,12 @@ func BodyParser(builder func() interface{}, maxSize int64) func(chi.Handler) chi
 				return
 			}
 
+			//check for required fields
+			if err := utils.JSONValidation(to); err != nil {
+				utils.Respond(w, 400, err)
+				return
+			}
+
 			ctx = context.WithValue(ctx, constants.CtxKeyParsedBody, to)
 
 			next.ServeHTTPC(ctx, w, r)

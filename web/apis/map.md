@@ -255,14 +255,6 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 }
 ```
 
-403
-
-```
-{
-  "error": "no write access"
-}
-```
-
 404
 
 ```
@@ -290,14 +282,6 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 ```
 {
   "error": "unauthorized access"
-}
-```
-
-403
-
-```
-{
-  "error": "no write access"
 }
 ```
 
@@ -337,14 +321,6 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 }
 ```
 
-403
-
-```
-{
-  "error": "no generate token access"
-}
-```
-
 404
 
 ```
@@ -372,14 +348,6 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 ```
 {
   "error": "unauthorized access"
-}
-```
-
-403
-
-```
-{
-  "error": "token is not valid"
 }
 ```
 
