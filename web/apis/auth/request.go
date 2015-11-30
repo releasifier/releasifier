@@ -8,3 +8,12 @@ type loginRequest struct {
 func loginRequestBuilder() interface{} {
 	return &loginRequest{}
 }
+
+type registerRequest struct {
+	loginRequest
+	Fullname *string `json:"fullname,require"`
+}
+
+func registerRequestBuilder() interface{} {
+	return &loginRequest{}
+}

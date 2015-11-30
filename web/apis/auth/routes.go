@@ -9,8 +9,9 @@ import (
 func Routes() chi.Router {
 	r := chi.NewRouter()
 
+	r.Post("/register", m.BodyParser(registerRequestBuilder, 512), register)
 	r.Post("/login", m.BodyParser(loginRequestBuilder, 512), login)
-	r.Get("/logout", logout)
+	r.Head("/logout", logout)
 
 	return r
 }

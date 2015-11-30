@@ -11,6 +11,12 @@ import (
 	"golang.org/x/net/context"
 )
 
+func register(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	//registerReq := ctx.Value(constants.CtxKeyParsedBody).(*registerRequest)
+
+	login(ctx, w, r)
+}
+
 func login(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	loginReq := ctx.Value(constants.CtxKeyParsedBody).(*loginRequest)
 	user, err := data.DB.User.FindByEmailPassword(*loginReq.Email, *loginReq.Password)
