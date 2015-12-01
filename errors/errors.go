@@ -6,6 +6,7 @@ import (
 )
 
 var (
+	ErrorSomethingWentWrong   = err.New("something went wrong")         //400
 	ErrorBodyIssue            = err.New("request body has some issues") //400
 	ErrorFilesTooBig          = err.New("files are too big")            //400
 	ErrorReleaseAlreadyLocked = err.New("release is already locked")    //400
@@ -23,6 +24,8 @@ var (
 //GetErrorStatusCode returns the proper http status code based on error
 func GetErrorStatusCode(err error) int {
 	switch err {
+	case ErrorSomethingWentWrong:
+		return http.StatusBadRequest
 	case ErrorBodyIssue:
 		return http.StatusBadRequest
 	case ErrorFilesTooBig:

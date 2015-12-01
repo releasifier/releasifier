@@ -1,5 +1,7 @@
 package apps
 
+import "github.com/alinz/releasifier/data"
+
 type createAppRequest struct {
 	Name *string `json:"name,required"`
 }
@@ -17,4 +19,20 @@ type updateAppRequest struct {
 
 func updateAppRequestBuilder() interface{} {
 	return &updateAppRequest{}
+}
+
+type generateAppTokenRequest struct {
+	Permission *data.Permission `json:"permission,required"`
+}
+
+func generateAppTokenRequestBuilder() interface{} {
+	return &generateAppTokenRequest{}
+}
+
+type appTokenRequest struct {
+	Token *string `json:"token,required"`
+}
+
+func appTokenRequestBuilder() interface{} {
+	return &appTokenRequest{}
 }

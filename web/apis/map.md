@@ -16,6 +16,9 @@ POST   : /apps
 GET    : /apps
 ```
 ```
+GET    : /apps/:appID
+```
+```
 PATCH  : /apps/:appID
 ```
 ```
@@ -221,6 +224,45 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 }
 ```
 
+### - Get an app by appID
+
+#### Request
+
+`GET : /apps/:appID`
+
+#### Response
+
+**Success**
+
+200
+
+```
+{
+  "id": 1,
+  "name": "Save the World",
+  "public_key": "you can't catch me",
+  "created_at": "2015"
+}
+```
+
+**Failure**
+
+401
+
+```
+{
+  "error": "unauthorized access"
+}
+```
+
+404
+
+```
+{
+  "error": "app not found"
+}
+```
+
 ### - Update an existing app
 
 #### Request
@@ -305,7 +347,6 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 
 ```
 {
-  "id": 1,
   "permission": "admin"
 }
 ```

@@ -206,3 +206,8 @@ func (s AppStore) HasPermission(appID, userID int64, permissions ...Permission) 
 
 	return targetID.ID == appID
 }
+
+//GrantAccess grnats access to app for a specific user with authorized permission
+func (s AppStore) GrantAccess(appID, userID int64, permission Permission) bool {
+	return false
+}

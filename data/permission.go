@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -16,6 +17,8 @@ const (
 	ADMIN
 	//MEMBER can publish a build only
 	MEMBER
+	//ANONYMOUSE nothing
+	ANONYMOUSE
 )
 
 var (
@@ -57,4 +60,12 @@ func (p *Permission) UnmarshalJSON(data []byte) error {
 	}
 	*p = v
 	return nil
+}
+
+//GetPermissionByName tries to conver string to permission value
+func GetPermissionByName(name string) (Permission, error) {
+	if v, ok := permissionNameToValue[name]; ok {
+		return v, nil
+	}
+	return ANONYMOUSE, errors.New("Permission is incorrect")
 }
