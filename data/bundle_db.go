@@ -8,8 +8,8 @@ type Bundle struct {
 	ReleaseID int64     `db:"release_id" json:"release_id"`
 	Hash      string    `db:"hash" json:"hash"`
 	Name      string    `db:"name" json:"name"`
-	Type      Type      `db:"type" json:"type"`
-	CreatedAt time.Time `db:"cretad_at" json:"created_at" bondb:",utc"`
+	Type      FileType  `db:"type" json:"type"`
+	CreatedAt time.Time `db:"created_at" json:"created_at" bondb:",utc"`
 }
 
 //CollectionName returns collection name in database

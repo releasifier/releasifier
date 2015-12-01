@@ -6,29 +6,29 @@ import (
 )
 
 //Type represents type of bundle store
-type Type int
+type FileType int
 
 const (
 	//CODE represents source code in JS
-	CODE Type = iota
+	CODE FileType = iota
 	//IMAGE represents picture and image types
 	IMAGE
 )
 
 var (
-	typeNameToValue = map[string]Type{
+	typeNameToValue = map[string]FileType{
 		"CODE":  CODE,
 		"IMAGE": IMAGE,
 	}
 
-	typeValueToName = map[Type]string{
+	typeValueToName = map[FileType]string{
 		CODE:  "CODE",
 		IMAGE: "IMAGE",
 	}
 )
 
-//MarshalJSON for type Type
-func (a Type) MarshalJSON() ([]byte, error) {
+//MarshalJSON for type FileType
+func (a FileType) MarshalJSON() ([]byte, error) {
 	if s, ok := interface{}(a).(fmt.Stringer); ok {
 		return json.Marshal(s.String())
 	}
@@ -40,7 +40,7 @@ func (a Type) MarshalJSON() ([]byte, error) {
 }
 
 //UnmarshalJSON for type Type
-func (a *Type) UnmarshalJSON(data []byte) error {
+func (a *FileType) UnmarshalJSON(data []byte) error {
 	var s string
 	if err := json.Unmarshal(data, &s); err != nil {
 		return fmt.Errorf("Type should be a string, got %s", data)

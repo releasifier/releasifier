@@ -31,6 +31,12 @@ func Routes() chi.Router {
 			r.Route("/:releaseID", func(r chi.Router) {
 				r.Patch("/", m.BodyParser(updateReleaseRequestBuilder, 1024), updateRelease)
 				r.Put("/lock", lockRelease)
+
+				r.Route("/bundles", func(r chi.Router) {
+					r.Post("/", uploadBundles)
+					r.Get("/", getAllBundles)
+					r.Delete("/:bundleID", deleteBundle)
+				})
 			})
 		})
 	})

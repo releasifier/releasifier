@@ -46,6 +46,9 @@ POST   : /apps/:appID/releases/:releaseID/bundles
 GET    : /apps/:appID/releases/:releaseID/bundles
 ```
 ```
+DELETE : /apps/:appID/releases/:releaseID/bundles/:bundlesID
+```
+```
 PUT    : /apps/:appID/releases/:releaseID/lock
 ```
 ```
@@ -712,6 +715,56 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 ```
 {
   "error": "release not found"
+}
+```
+
+### - Remove a bundle
+
+#### Request
+
+`DELETE : /apps/:appID/releases/:releaseID/bundles/:bundlesID`
+
+#### Response
+
+**Success**
+
+200
+
+**Failure**
+
+400
+
+```
+{
+  "error": "release is already locked"
+}
+```
+
+401
+
+```
+{
+  "error": "unauthorized access"
+}
+```
+
+404
+
+```
+{
+  "error": "app not found"
+}
+```
+
+```
+{
+  "error": "release not found"
+}
+```
+
+```
+{
+  "error": "bundle not found"
 }
 ```
 
