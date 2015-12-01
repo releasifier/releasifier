@@ -65,6 +65,10 @@ func (s AppStore) FindAllApps(userID int64) ([]*AppWithPermission, error) {
 		return nil, err
 	}
 
+	if apps == nil {
+		apps = make([]*AppWithPermission, 0)
+	}
+
 	return apps, nil
 }
 
@@ -82,11 +86,7 @@ func (s AppStore) FindApp(appID, userID int64) (*AppWithPermission, error) {
 
 	err := q.Iterator().One(&app)
 
-	if err != nil {
-		return nil, err
-	}
-
-	if app == nil {
+	if app == nil || err != nil {
 		return nil, internalErrors.ErrorAppNotFound
 	}
 
