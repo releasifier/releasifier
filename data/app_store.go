@@ -27,7 +27,9 @@ func (s AppStore) CreateNewApp(userID int64, appName string) (*App, error) {
 		Private:    true, //by default, all projects are private
 	}
 
-	tx.Save(app)
+	if err := tx.Save(app); err != nil {
+		return nil, internalErrors.ErrorDuplicateName
+	}
 
 	appUserPermission := &AppsUsersPermissions{
 		ID:         0,
@@ -36,7 +38,7 @@ func (s AppStore) CreateNewApp(userID int64, appName string) (*App, error) {
 		Permission: OWNER,
 	}
 
-	if err := tx.Save(appUserPermission); err != nil {
+	if err = tx.Save(appUserPermission); err != nil {
 		return nil, err
 	}
 
