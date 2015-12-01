@@ -209,5 +209,26 @@ func (s AppStore) HasPermission(appID, userID int64, permissions ...Permission) 
 
 //GrantAccess grnats access to app for a specific user with authorized permission
 func (s AppStore) GrantAccess(appID, userID int64, permission Permission) bool {
-	return false
+	tx, err := DB.NewTransaction()
+	if err != nil {
+		return false
+	}
+	defer tx.Close()
+
+	appUserPermission := &AppsUsersPermissions{
+		ID:         0,
+		UserID:     userID,
+		AppID:      appID,
+		Permission: permission,
+	}
+
+	if err := tx.Save(appUserPermission); err != nil {
+		return false
+	}
+
+	if err = tx.Commit(); err != nil {
+		return false
+	}
+
+	return true
 }

@@ -69,3 +69,12 @@ func GetPermissionByName(name string) (Permission, error) {
 	}
 	return ANONYMOUSE, errors.New("Permission is incorrect")
 }
+
+//GetPermssionString convert permision into string value
+func GetPermssionString(permission Permission) (string, error) {
+	if v, ok := permissionValueToName[permission]; ok {
+		return v, nil
+	}
+
+	return "ANONYMOUSE", errors.New("Permission is incorrect")
+}

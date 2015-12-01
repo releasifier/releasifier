@@ -49,9 +49,16 @@ func generateAppToken(ctx context.Context, w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	permission, err := data.GetPermssionString(*generateAppTokenReq.Permission)
+
+	if err != nil {
+		utils.RespondEx(w, nil, 0, errors.ErrorSomethingWentWrong)
+		return
+	}
+
 	claims := map[string]interface{}{
 		"app_id":     fmt.Sprintf("%v", appID),
-		"permission": fmt.Sprintf("%v", *generateAppTokenReq.Permission),
+		"permission": fmt.Sprintf("%v", permission),
 	}
 	_, tokenStr, err := security.TokenAuth.Encode(claims)
 
@@ -71,31 +78,31 @@ func acceptAppToken(ctx context.Context, w http.ResponseWriter, r *http.Request)
 	//decode jwt token
 	token, err := security.TokenAuth.Decode(*appTokenReq.Token)
 	if err != nil || !token.Valid {
-		utils.RespondEx(w, nil, 0, errors.ErrorAuthorizeAccess)
+		utils.RespondEx(w, nil, 401, errors.ErrorAuthorizeAccess)
 		return
 	}
 
 	tokenAppID, err := strconv.ParseInt(token.Claims["app_id"].(string), 10, 64)
 	if err != nil || tokenAppID != appID {
-		utils.RespondEx(w, nil, 0, errors.ErrorAuthorizeAccess)
+		utils.RespondEx(w, nil, 402, errors.ErrorAuthorizeAccess)
 		return
 	}
 
 	tokenPermission, err := data.GetPermissionByName(token.Claims["permission"].(string))
 	if err != nil || tokenPermission == data.ANONYMOUSE {
-		utils.RespondEx(w, nil, 0, errors.ErrorAuthorizeAccess)
+		utils.RespondEx(w, nil, 403, errors.ErrorAuthorizeAccess)
 		return
 	}
 
 	//check if user has already have an access
 	if data.DB.App.HasPermission(appID, userID, data.ADMIN, data.OWNER, data.MEMBER) {
-		utils.RespondEx(w, nil, 0, errors.ErrorAlreadyAcceessed)
+		utils.RespondEx(w, nil, 404, errors.ErrorAlreadyAcceessed)
 		return
 	}
 
 	//try to grand access to app with authorized permission
 	if !data.DB.App.GrantAccess(appID, userID, tokenPermission) {
-		utils.RespondEx(w, nil, 0, errors.ErrorAppNotFound)
+		utils.RespondEx(w, nil, 405, errors.ErrorAppNotFound)
 		return
 	}
 
