@@ -1,4 +1,4 @@
-package releases
+package apps
 
 import (
 	"net/http"
@@ -7,7 +7,6 @@ import (
 	"github.com/alinz/releasifier/lib/utils"
 	"github.com/alinz/releasifier/web/constants"
 	"github.com/alinz/releasifier/web/util"
-
 	"golang.org/x/net/context"
 )
 
@@ -28,7 +27,7 @@ func createRelease(ctx context.Context, w http.ResponseWriter, r *http.Request) 
 	createReleaseReq := ctx.Value(constants.CtxKeyParsedBody).(*createReleaseRequest)
 
 	//try to create release and return created release record
-	release, err := data.DB.Release.CreateRelease(createReleaseReq.Version, createReleaseReq.Platform, createReleaseReq.Note, userID, appID)
+	release, err := data.DB.Release.CreateRelease(*createReleaseReq.Version, *createReleaseReq.Platform, createReleaseReq.Note, userID, appID)
 	if err == nil {
 		utils.Respond(w, 200, release)
 	} else {

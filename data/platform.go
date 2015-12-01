@@ -3,6 +3,7 @@ package data
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 //Platform defines type of platform
@@ -36,7 +37,7 @@ func (p Platform) MarshalJSON() ([]byte, error) {
 	if !ok {
 		return nil, fmt.Errorf("invalid Platform: %d", p)
 	}
-	return json.Marshal(s)
+	return json.Marshal(strings.ToLower(s))
 }
 
 //UnmarshalJSON for type Platform
@@ -45,7 +46,7 @@ func (p *Platform) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &s); err != nil {
 		return fmt.Errorf("Platform should be a string, got %s", data)
 	}
-	v, ok := platformNameToValue[s]
+	v, ok := platformNameToValue[strings.ToUpper(s)]
 	if !ok {
 		return fmt.Errorf("invalid Platform %q", s)
 	}

@@ -13,12 +13,21 @@ func Routes() chi.Router {
 
 	r.Post("/", m.BodyParser(createAppRequestBuilder, 100), createApp)
 	r.Get("/", getAllApps)
-	r.Get("/:appID", getApp)
-	r.Patch("/:appID", m.BodyParser(updateAppRequestBuilder, 2^14+100), updateApp)
-	r.Delete("/:appID", removeApp)
 
-	r.Post("/:appID/token", m.BodyParser(generateAppTokenRequestBuilder, 100), generateAppToken)
-	r.Put("/:appID/token", m.BodyParser(appTokenRequestBuilder, 200), acceptAppToken)
+	r.Route("/:appID", func(r chi.Router) {
+		r.Get("/", getApp)
+		r.Patch("/", m.BodyParser(updateAppRequestBuilder, 2^14+100), updateApp)
+		r.Delete("/", removeApp)
+
+		r.Route("/token", func(r chi.Router) {
+			r.Post("/", m.BodyParser(generateAppTokenRequestBuilder, 100), generateAppToken)
+			r.Put("/", m.BodyParser(appTokenRequestBuilder, 200), acceptAppToken)
+		})
+
+		r.Route("/releases", func(r chi.Router) {
+			r.Post("/", m.BodyParser(createReleaseRequestBuilder, 1024), createRelease)
+		})
+	})
 
 	return r
 }
