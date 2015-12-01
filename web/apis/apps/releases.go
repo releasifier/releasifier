@@ -11,7 +11,13 @@ import (
 )
 
 func getAllReleases(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	//get userID and appID
+	userID, _ := util.GetUserIDFromContext(ctx)
+	appID, _ := util.GetParamValueAsID(ctx, "appID")
 
+	releases, err := data.DB.Release.FindAllReleases(userID, appID)
+
+	utils.RespondEx(w, releases, 0, err)
 }
 
 func getRelease(ctx context.Context, w http.ResponseWriter, r *http.Request) {

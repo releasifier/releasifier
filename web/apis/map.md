@@ -444,7 +444,7 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 
 **Success**
 
-201
+200
 
 ```
 {
@@ -487,12 +487,6 @@ POST   : /apps/:appID/releases/:releaseID/bundles/download
 ```
 {
   "error": "duplicate version"
-}
-```
-
-```
-{
-  "error": "duplicate name"
 }
 ```
 

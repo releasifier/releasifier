@@ -26,6 +26,7 @@ func Routes() chi.Router {
 
 		r.Route("/releases", func(r chi.Router) {
 			r.Post("/", m.BodyParser(createReleaseRequestBuilder, 1024), createRelease)
+			r.Get("/", getAllReleases)
 		})
 	})
 

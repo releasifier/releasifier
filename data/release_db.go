@@ -5,7 +5,7 @@ import "time"
 //Release structure for data represents in database
 type Release struct {
 	ID       int64     `db:"id,omitempty,pk" json:"id"`
-	AppID    int64     `db:"app_id" json:"app_id"`
+	AppID    int64     `db:"app_id" json:"-"`
 	Platform Platform  `db:"platform" json:"platform"`
 	Note     string    `db:"note" json:"note"`
 	Version  Version   `db:"version" json:"version"`
