@@ -48,3 +48,12 @@ func createRelease(ctx context.Context, w http.ResponseWriter, r *http.Request) 
 		utils.Respond(w, 400, err)
 	}
 }
+
+func lockRelease(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	userID, _ := util.GetUserIDFromContext(ctx)
+	appID, _ := util.GetParamValueAsID(ctx, "appID")
+	releaseID, _ := util.GetParamValueAsID(ctx, "releaseID")
+
+	err := data.DB.Release.LockRelease(releaseID, appID, userID)
+	utils.RespondEx(w, nil, 0, err)
+}

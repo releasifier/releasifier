@@ -131,3 +131,42 @@ func (s ReleaseStore) UpdateRelease(note *string, platform *Platform, version *V
 
 	return nil
 }
+
+//LockRelease lock a release, makes the private project public.
+//this is one time operation an can not be reverted
+func (s ReleaseStore) LockRelease(releaseID, appID, userID int64) error {
+	b := s.Session().Builder()
+	q := b.
+		Select("releases.id", "releases.app_id", "releases.platform", "releases.note", "releases.version", "releases.created_at", "releases.private").
+		From("releases").
+		Join("apps").
+		On("apps.id=releases.app_id").
+		Join("apps_users_permissions").
+		On("apps.id=apps_users_permissions.app_id").
+		Where("releases.id=? AND apps_users_permissions.user_id=? AND apps_users_permissions.app_id=? AND apps_users_permissions.permission!=?", releaseID, userID, appID, MEMBER)
+
+	var release *Release
+
+	err := q.Iterator().One(&release)
+
+	if err != nil {
+		return internalErrors.ErrorReleaseNotFound
+	}
+
+	if release == nil {
+		return internalErrors.ErrorReleaseNotFound
+	}
+
+	//once private becomes public, there is no turning back
+	if release.Private {
+		return internalErrors.ErrorReleaseAlreadyLocked
+	}
+
+	release.Private = true
+
+	if err = s.Save(release); err != nil {
+		return internalErrors.ErrorSomethingWentWrong
+	}
+
+	return nil
+}

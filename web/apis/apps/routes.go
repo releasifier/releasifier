@@ -30,6 +30,7 @@ func Routes() chi.Router {
 
 			r.Route("/:releaseID", func(r chi.Router) {
 				r.Patch("/", m.BodyParser(updateReleaseRequestBuilder, 1024), updateRelease)
+				r.Put("/lock", lockRelease)
 			})
 		})
 	})
