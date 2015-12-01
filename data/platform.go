@@ -48,7 +48,7 @@ func (p *Platform) UnmarshalJSON(data []byte) error {
 	}
 	v, ok := platformNameToValue[strings.ToUpper(s)]
 	if !ok {
-		return fmt.Errorf("invalid Platform %q", s)
+		return fmt.Errorf("invalid Platform '%s'", s)
 	}
 	*p = v
 	return nil
