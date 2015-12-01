@@ -1,6 +1,9 @@
 package data
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/alinz/releasifier/errors"
 
 	"upper.io/bond"
@@ -30,12 +33,15 @@ func (s UserStore) Create(fullname, email, password string) (*User, error) {
 	defer tx.Close()
 
 	user := &User{
-		Fullname: fullname,
-		Email:    email,
-		Password: password,
+		Fullname:  fullname,
+		Email:     email,
+		Password:  password,
+		CreatedAt: time.Now().UTC().Truncate(time.Second),
 	}
 
 	tx.Save(user)
+
+	fmt.Println(user)
 
 	if err = tx.Commit(); err != nil {
 		return nil, errors.ErrorDuplicateEmail

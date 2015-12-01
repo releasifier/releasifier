@@ -2,6 +2,7 @@ package data
 
 import (
 	"fmt"
+	"time"
 
 	internalErrors "github.com/alinz/releasifier/errors"
 	"upper.io/bond"
@@ -25,6 +26,7 @@ func (s AppStore) CreateNewApp(userID int64, appName string) (*App, error) {
 		PublicKey:  "",
 		PrivateKey: "",
 		Private:    true, //by default, all projects are private
+		CreatedAt:  time.Now().UTC().Truncate(time.Second),
 	}
 
 	if err := tx.Save(app); err != nil {

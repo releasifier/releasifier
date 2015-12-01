@@ -4,12 +4,12 @@ import "time"
 
 //Bundle structure for each bundle represents in database
 type Bundle struct {
-	ID        int64      `db:"id,omitempty,pk" json:"id"`
-	ReleaseID int64      `db:"release_id" json:"release_id"`
-	Hash      string     `db:"hash" json:"hash"`
-	Name      string     `db:"name" json:"name"`
-	Type      Type       `db:"type" json:"type"`
-	CreatedAt *time.Time `db:"cretad_at" json:"created_at" bondb:",utc"`
+	ID        int64     `db:"id,omitempty,pk" json:"id"`
+	ReleaseID int64     `db:"release_id" json:"release_id"`
+	Hash      string    `db:"hash" json:"hash"`
+	Name      string    `db:"name" json:"name"`
+	Type      Type      `db:"type" json:"type"`
+	CreatedAt time.Time `db:"cretad_at" json:"created_at" bondb:",utc"`
 }
 
 //CollectionName returns collection name in database
