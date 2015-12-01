@@ -133,7 +133,9 @@ func (s AppStore) UpdateApp(appID int64, appName, publicKey, privateKey *string,
 		app.Private = *private
 	}
 
-	s.Save(app)
+	if err = s.Save(app); err != nil {
+		return internalErrors.ErrorDuplicateName
+	}
 
 	return nil
 }
