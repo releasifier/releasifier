@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"time"
 
 	internalErrors "github.com/alinz/releasifier/errors"
@@ -69,4 +70,64 @@ func (s ReleaseStore) FindAllReleases(appID, userID int64) ([]*Release, error) {
 	}
 
 	return releases, nil
+}
+
+//UpdateRelease updates release record if it's private.
+func (s ReleaseStore) UpdateRelease(note *string, platform *Platform, version *Version, releaseID, appID, userID int64) error {
+	var requireToUpdate bool = true
+
+	b := s.Session().Builder()
+	q := b.
+		Select("releases.id", "releases.app_id", "releases.platform", "releases.note", "releases.version", "releases.created_at", "releases.private").
+		From("releases").
+		Join("apps").
+		On("apps.id=releases.app_id").
+		Join("apps_users_permissions").
+		On("apps.id=apps_users_permissions.app_id").
+		Where("releases.id=? AND apps_users_permissions.user_id=? AND apps_users_permissions.app_id=? AND apps_users_permissions.permission!=?", releaseID, userID, appID, MEMBER)
+
+	var release *Release
+
+	err := q.Iterator().One(&release)
+
+	if err != nil {
+		return err
+	}
+
+	if release == nil {
+		return internalErrors.ErrorReleaseNotFound
+	}
+
+	//once private becomes public, there is no turning back
+	if !release.Private {
+		return internalErrors.ErrorReleaseLocked
+	}
+
+	//check if one of `note`, `platform` or `version` has been requested to be updated
+	if note != nil {
+		release.Note = *note
+		requireToUpdate = true
+	}
+
+	if platform != nil {
+		release.Platform = *platform
+		requireToUpdate = true
+	}
+
+	if version != nil {
+		release.Version = *version
+		requireToUpdate = true
+	}
+
+	//if required is set true it means that we can save the release.
+	//it might adds a little bit performance gain! Still don't know!
+	if requireToUpdate {
+		if err = s.Save(release); err != nil {
+			fmt.Println(release)
+			fmt.Println(err)
+			return internalErrors.ErrorDuplicateName
+		}
+	}
+
+	return nil
 }

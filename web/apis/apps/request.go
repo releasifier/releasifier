@@ -50,3 +50,13 @@ type createReleaseRequest struct {
 func createReleaseRequestBuilder() interface{} {
 	return &createReleaseRequest{}
 }
+
+type updateReleaseRequest struct {
+	Platform *data.Platform `json:"platform"`
+	Note     *string        `json:"note"`
+	Version  *data.Version  `json:"version"`
+}
+
+func updateReleaseRequestBuilder() interface{} {
+	return &updateReleaseRequest{}
+}

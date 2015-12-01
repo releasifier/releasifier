@@ -20,8 +20,16 @@ func getAllReleases(ctx context.Context, w http.ResponseWriter, r *http.Request)
 	utils.RespondEx(w, releases, 0, err)
 }
 
-func getRelease(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+func updateRelease(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	userID, _ := util.GetUserIDFromContext(ctx)
+	appID, _ := util.GetParamValueAsID(ctx, "appID")
+	releaseID, _ := util.GetParamValueAsID(ctx, "releaseID")
 
+	//grabing update release request
+	updateReleaseReq := ctx.Value(constants.CtxKeyParsedBody).(*updateReleaseRequest)
+
+	err := data.DB.Release.UpdateRelease(updateReleaseReq.Note, updateReleaseReq.Platform, updateReleaseReq.Version, releaseID, appID, userID)
+	utils.RespondEx(w, nil, 0, err)
 }
 
 func createRelease(ctx context.Context, w http.ResponseWriter, r *http.Request) {
