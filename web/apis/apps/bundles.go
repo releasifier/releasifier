@@ -1,7 +1,9 @@
 package apps
 
 import (
+	"archive/zip"
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -136,4 +138,48 @@ func deleteBundle(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 
 	err := data.DB.Bundle.RemoveBundle(bundleID, releaseID, appID, userID)
 	utils.RespondEx(w, nil, 0, err)
+}
+
+func downloadBundle(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	userID, _ := util.GetUserIDFromContext(ctx)
+	appID, _ := util.GetParamValueAsID(ctx, "appID")
+	releaseID, _ := util.GetParamValueAsID(ctx, "releaseID")
+
+	bundles, err := data.DB.Bundle.FindAllBundles(releaseID, appID, userID)
+
+	if err != nil {
+		utils.RespondEx(w, nil, 0, err)
+		return
+	}
+
+	//set the header to application/zip
+	w.Header().Set("Content-Type", "application/zip")
+
+	//zip the files
+	compress := zip.NewWriter(w)
+	defer compress.Close()
+
+	type meta struct {
+		Name string `json:"actual_file_name"`
+		File string `json:"file_name"`
+	}
+
+	var bundleMeta []*meta
+	bundleMeta = make([]*meta, 0)
+
+	for _, bundle := range bundles {
+		bundleMeta = append(bundleMeta, &meta{Name: bundle.Name, File: bundle.Hash})
+
+		//create a file with hash name
+		conatinFile, _ := compress.Create(bundle.Hash)
+		targetFile, _ := os.Open(config.Conf.FileUpload.Bundle + bundle.Hash)
+
+		io.Copy(conatinFile, targetFile)
+
+		targetFile.Close()
+	}
+
+	//bundle meta information which maps every file inside the zip file
+	bundle, _ := compress.Create("bundle.json")
+	json.NewEncoder(bundle).Encode(bundleMeta)
 }

@@ -35,6 +35,7 @@ func Routes() chi.Router {
 				r.Route("/bundles", func(r chi.Router) {
 					r.Post("/", uploadBundles)
 					r.Get("/", getAllBundles)
+					r.Post("/download", downloadBundle)
 					r.Delete("/:bundleID", deleteBundle)
 				})
 			})
