@@ -129,5 +129,11 @@ func getAllBundles(ctx context.Context, w http.ResponseWriter, r *http.Request) 
 }
 
 func deleteBundle(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	userID, _ := util.GetUserIDFromContext(ctx)
+	appID, _ := util.GetParamValueAsID(ctx, "appID")
+	releaseID, _ := util.GetParamValueAsID(ctx, "releaseID")
+	bundleID, _ := util.GetParamValueAsID(ctx, "bundleID")
 
+	err := data.DB.Bundle.RemoveBundle(bundleID, releaseID, appID, userID)
+	utils.RespondEx(w, nil, 0, err)
 }

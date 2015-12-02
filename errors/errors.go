@@ -16,6 +16,7 @@ var (
 	ErrorReleaseLocked        = err.New("release is locked")            //403
 	ErrorAppNotFound          = err.New("app not found")                //404
 	ErrorReleaseNotFound      = err.New("release not found")            //404
+	ErrorBundleNotFound       = err.New("bundle not found")             //404
 	ErrorDuplicateEmail       = err.New("duplicate email")              //409
 	ErrorDuplicateVersion     = err.New("duplicate version")            //409
 	ErrorDuplicateName        = err.New("duplicate name")               //409

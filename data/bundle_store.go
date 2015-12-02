@@ -1,10 +1,12 @@
 package data
 
 import (
+	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/alinz/releasifier/common"
+	"github.com/alinz/releasifier/config"
 	internalErrors "github.com/alinz/releasifier/errors"
 	"github.com/alinz/releasifier/logme"
 	"upper.io/bond"
@@ -108,4 +110,48 @@ func (s BundleStore) FindAllBundles(releaseID, appID, userID int64) ([]*Bundle, 
 	}
 
 	return bundles, nil
+}
+
+//RemoveBundle removes a bundle if you have permission and release not locked
+func (s BundleStore) RemoveBundle(bundleID, releaseID, appID, userID int64) error {
+	tx, err := s.Session().NewTransaction()
+	if err != nil {
+		return err
+	}
+
+	defer tx.Close()
+
+	b := tx.Builder()
+	q := b.
+		Select("bundles.id", "bundles.release_id", "bundles.hash", "bundles.name", "bundles.type", "bundles.created_at").
+		From("bundles").
+		Join("releases").
+		On("bundles.release_id=releases.id").
+		Join("apps_users_permissions").
+		On("apps_users_permissions.app_id=releases.app_id").
+		Where("apps_users_permissions.user_id=? AND apps_users_permissions.app_id=? AND bundles.release_id=? AND apps_users_permissions.permission!=? AND releases.private=TRUE", userID, appID, releaseID, MEMBER)
+
+	var bundle *Bundle
+	err = q.Iterator().One(&bundle)
+	if err != nil || bundle == nil {
+		logme.Warn(err)
+		return internalErrors.ErrorBundleNotFound
+	}
+
+	tx.Delete(bundle)
+
+	err = tx.Commit()
+	if err != nil {
+		logme.Warn(err.Error())
+		return internalErrors.ErrorBundleNotFound
+	}
+
+	if err == nil {
+		if err = os.Remove(config.Conf.FileUpload.Bundle + bundle.Hash); err != nil {
+			logme.Warn(err.Error())
+			return internalErrors.ErrorSomethingWentWrong
+		}
+	}
+
+	return nil
 }
