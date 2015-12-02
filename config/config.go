@@ -40,7 +40,7 @@ type Config struct {
 	FileUpload struct {
 		MaxSize int64  `toml:"max_size"`
 		Temp    string `toml:"temp"`
-		Bundle  string `toml:"bunle"`
+		Bundle  string `toml:"bundle"`
 	} `toml:"file_upload"`
 }
 
