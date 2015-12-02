@@ -1,5 +1,7 @@
 clean:
 	@rm -rf ./bin
+	@mkdir -p bin/temp
+	@mkdir -p bin/bundle
 
 dist-tools:
 	go get -u github.com/pkieltyka/fresh
@@ -30,4 +32,3 @@ kill-by-port:
 	lsof -t -i:7331 | xargs kill
 
 kill: kill-fresh kill-by-port
-	
