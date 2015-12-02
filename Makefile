@@ -1,7 +1,7 @@
 clean:
 	@rm -rf ./bin
-	@mkdir -p bin/temp
-	@mkdir -p bin/bundle
+	@mkdir -p ./bin/temp
+	@mkdir -p ./bin/bundle
 
 dist-tools:
 	go get -u github.com/pkieltyka/fresh
@@ -10,9 +10,20 @@ dist-tools:
 deps:
 	@glock -v sync github.com/alinz/releasifier
 
-build:
+build: clean
 	@mkdir -p ./bin
 	cd cmd/releasifier && GOGC=off go build -i -o ../../bin/releasifier
+
+build-all: clean
+	cd cmd/releasifier; \
+	for GOOS in darwin linux windows; do \
+		for GOARCH in 386 amd64; do \
+			echo "building $$GOOS $$GOARCH ..."; \
+			export GOOS=$$GOOS; \
+			export GOARCH=$$GOARCH; \
+			go build -o ../../bin/releasifier-$$GOOS-$$GOARCH; \
+		done \
+	done
 
 dev: kill
 	@(export CONFIG=$$PWD/etc/releasifier.conf && \
