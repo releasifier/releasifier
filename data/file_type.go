@@ -3,6 +3,7 @@ package data
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 //Type represents type of bundle store
@@ -36,7 +37,7 @@ func (a FileType) MarshalJSON() ([]byte, error) {
 	if !ok {
 		return nil, fmt.Errorf("invalid Type: %d", a)
 	}
-	return json.Marshal(s)
+	return json.Marshal(strings.ToLower(s))
 }
 
 //UnmarshalJSON for type Type
@@ -45,7 +46,7 @@ func (a *FileType) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &s); err != nil {
 		return fmt.Errorf("Type should be a string, got %s", data)
 	}
-	v, ok := typeNameToValue[s]
+	v, ok := typeNameToValue[strings.ToUpper(s)]
 	if !ok {
 		return fmt.Errorf("invalid Type %q", s)
 	}
