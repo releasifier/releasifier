@@ -82,3 +82,30 @@ func (s BundleStore) UploadBundles(releaseID, appID, userID int64, fileInfos []*
 
 	return bundles, nil
 }
+
+//FindAllBundles returns all bundles
+func (s BundleStore) FindAllBundles(releaseID, appID, userID int64) ([]*Bundle, error) {
+	b := s.Session().Builder()
+	q := b.
+		Select("bundles.id", "bundles.release_id", "bundles.hash", "bundles.name", "bundles.type", "bundles.created_at").
+		From("bundles").
+		Join("releases").
+		On("bundles.release_id=releases.id").
+		Join("apps_users_permissions").
+		On("apps_users_permissions.app_id=releases.app_id").
+		Where("apps_users_permissions.user_id=? AND apps_users_permissions.app_id=? AND bundles.release_id=?", userID, appID, releaseID)
+
+	var bundles []*Bundle
+	err := q.Iterator().All(&bundles)
+
+	if err != nil {
+		logme.Warn(err)
+		return nil, internalErrors.ErrorReleaseNotFound
+	}
+
+	if bundles == nil || len(bundles) == 0 {
+		bundles = make([]*Bundle, 0)
+	}
+
+	return bundles, nil
+}

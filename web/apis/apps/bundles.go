@@ -120,7 +120,12 @@ func uploadBundles(ctx context.Context, w http.ResponseWriter, r *http.Request) 
 }
 
 func getAllBundles(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	userID, _ := util.GetUserIDFromContext(ctx)
+	appID, _ := util.GetParamValueAsID(ctx, "appID")
+	releaseID, _ := util.GetParamValueAsID(ctx, "releaseID")
 
+	bundles, err := data.DB.Bundle.FindAllBundles(releaseID, appID, userID)
+	utils.RespondEx(w, bundles, 0, err)
 }
 
 func deleteBundle(ctx context.Context, w http.ResponseWriter, r *http.Request) {
