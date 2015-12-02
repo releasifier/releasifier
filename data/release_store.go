@@ -5,6 +5,7 @@ import (
 	"time"
 
 	internalErrors "github.com/alinz/releasifier/errors"
+	"github.com/alinz/releasifier/logme"
 	"upper.io/bond"
 )
 
@@ -150,6 +151,7 @@ func (s ReleaseStore) LockRelease(releaseID, appID, userID int64) error {
 	err := q.Iterator().One(&release)
 
 	if err != nil {
+		logme.Warn(err.Error())
 		return internalErrors.ErrorReleaseNotFound
 	}
 
@@ -158,11 +160,11 @@ func (s ReleaseStore) LockRelease(releaseID, appID, userID int64) error {
 	}
 
 	//once private becomes public, there is no turning back
-	if release.Private {
+	if release.Private == false {
 		return internalErrors.ErrorReleaseAlreadyLocked
 	}
 
-	release.Private = true
+	release.Private = false
 
 	if err = s.Save(release); err != nil {
 		return internalErrors.ErrorSomethingWentWrong
