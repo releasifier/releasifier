@@ -11,7 +11,7 @@ import (
 
 var (
 	flags    = flag.NewFlagSet("releasifier", flag.ExitOnError)
-	confFile = flag.String("config", "", "path to config file")
+	confFile = flags.String("config", "", "path to config file")
 )
 
 func main() {
