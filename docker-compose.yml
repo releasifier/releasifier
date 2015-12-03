@@ -1,0 +1,7 @@
+releasifier:
+  image: releasifier
+  links: [releasifierdb]
+  ports: ['7331:7331']
+
+releasifierdb:
+  image: releasifierdb

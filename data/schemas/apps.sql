@@ -11,7 +11,11 @@ CREATE SEQUENCE app_id_seq
 CREATE TABLE apps (
     id bigint DEFAULT nextval('app_id_seq'::regclass) NOT NULL,
     name varchar(256) NOT NULL,
-    created_at timestamp DEFAULT now() NOT NULL
+    public_key text NOT NULL,
+    private_key text NOT NULL,
+    created_at timestamp DEFAULT now() NOT NULL,
+    private boolean DEFAULT TRUE NOT NULL
 );
 
 ALTER TABLE ONLY apps ADD CONSTRAINT apps_pkey PRIMARY KEY (id);
+ALTER TABLE apps ADD UNIQUE ("name");

@@ -4,8 +4,6 @@ database="releasifier_db"
 user="releasifier_agent"
 password="98uhi4q3brjfnsdlzisw2"
 
-# create postgres USER as SUPERUSER
-# psql <<< "CREATE USER postgres SUPERUSER;"
 
 # removing tracing
 psql -U postgres <<< "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$database' AND pid <> pg_backend_pid();"
@@ -20,8 +18,8 @@ psql -U postgres <<< "CREATE DATABASE $database ENCODING 'UTF-8' LC_COLLATE='en_
 psql -U postgres <<< "CREATE USER $user WITH PASSWORD '$password';"
 
 # updated schema
-cat /data/schemas/users.sql | psql -U $user -d $database
-cat /data/schemas/apps.sql | psql -U $user -d $database
-cat /data/schemas/apps_users_permissions.sql | psql -U $user -d $database
-cat /data/schemas/releases.sql | psql -U $user -d $database
-cat /data/schemas/bundles.sql | psql -U $user -d $database
+cat /migration/users.sql | psql -U $user -d $database
+cat /migration/apps.sql | psql -U $user -d $database
+cat /migration/apps_users_permissions.sql | psql -U $user -d $database
+cat /migration/releases.sql | psql -U $user -d $database
+cat /migration/bundles.sql | psql -U $user -d $database

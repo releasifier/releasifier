@@ -14,8 +14,12 @@ CREATE TABLE releases (
     platform int NOT NULL,
     note text DEFAULT '',
     version bigint NOT NULL,
-    created_at timestamp DEFAULT now() NOT NULL
+    created_at timestamp DEFAULT now() NOT NULL,
+    private boolean DEFAULT TRUE NOT NULL
 );
 
 ALTER TABLE ONLY releases ADD CONSTRAINT releases_pkey PRIMARY KEY (id);
 ALTER TABLE releases ADD FOREIGN KEY (app_id) REFERENCES apps(id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- # each platform can have their own versions.
+ALTER TABLE releases ADD UNIQUE (app_id, platform, version);
