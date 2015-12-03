@@ -45,5 +45,8 @@ kill-by-port:
 kill: kill-fresh kill-by-port
 
 
-docker-rm-all-images:
+docker-rm-all-images: docker-rm-existing-ps
 	docker images | grep "^<none>" | awk '{print $$3}' | xargs docker rmi
+
+docker-rm-existing-ps:
+	docker ps -a | awk 'NR>1' | awk '{print $$1}' | xargs docker rm
