@@ -43,3 +43,7 @@ kill-by-port:
 	lsof -t -i:7331 | xargs kill
 
 kill: kill-fresh kill-by-port
+
+
+docker-rm-all-images:
+	docker images | grep "^<none>" | awk '{print $$3}' | xargs docker rmi
