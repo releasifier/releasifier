@@ -2,6 +2,7 @@ clean:
 	@rm -rf ./bin
 	@mkdir -p ./bin/temp
 	@mkdir -p ./bin/bundle
+	@mkdir -p ./bin/data
 
 dist-tools:
 	go get -u github.com/pkieltyka/fresh
@@ -50,3 +51,23 @@ docker-rm-all-images: docker-rm-existing-ps
 
 docker-rm-existing-ps:
 	docker ps -a | awk 'NR>1' | awk '{print $$1}' | xargs docker rm
+
+init:
+
+
+
+docker-dev:
+	docker run -d -p 5432:5432 -v $$pwd/bin/data:/var/lib/postgresql/data --restart=always --name postgres -e POSTGRES_PASSWORD=betame postgres
+
+docker-psql:
+	docker run -it --rm --link releasifierdb:releasifierdb releasifierdb sh -c 'exec psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U releasifierdb'
+
+start-db:
+	docker run -d \
+						 -p 5432:5432 \
+						 -v $$pwd/bin/data:/var/lib/postgresql/data \
+						 --restart=always \
+						 --name postgres \
+						 -e POSTGRES_PASSWORD=betame \
+						 -e POSTGRES_USER=ali \
+						 postgres

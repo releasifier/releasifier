@@ -1,6 +1,7 @@
 releasifier:
   image: releasifier
-  links: [postgres]
+  links: [releasifierdb]
   ports: ['7331:7331']
-postgres:
-  image: postgres
+
+releasifierdb:
+  image: releasifierdb
