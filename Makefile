@@ -52,10 +52,6 @@ docker-rm-all-images: docker-rm-existing-ps
 docker-rm-existing-ps:
 	docker ps -a | awk 'NR>1' | awk '{print $$1}' | xargs docker rm
 
-init:
-
-
-
 docker-dev:
 	docker run -d -p 5432:5432 -v $$pwd/bin/data:/var/lib/postgresql/data --restart=always --name postgres -e POSTGRES_PASSWORD=betame postgres
 
@@ -71,3 +67,14 @@ start-db:
 						 -e POSTGRES_PASSWORD=betame \
 						 -e POSTGRES_USER=ali \
 						 postgres
+
+
+kill-releasifier:
+	docker ps | awk 'NR>1' | grep releasifier | awk '{print $$1}' | xargs docker kill
+	docker ps | awk 'NR>1' | grep releasifierdb | awk '{print $$1}' | xargs docker kill
+	docker ps -a | awk 'NR>1' | grep releasifier | awk '{print $$1}' | xargs docker rm
+	docker ps -a | awk 'NR>1' | grep releasifierdb | awk '{print $$1}' | xargs docker rm
+
+run-prod: kill-releasifier
+	docker run -d --name releasifierdb releasifierdb
+	docker run -d -p 7331:7331 --name releasifier --restart=always --link releasifierdb releasifier
